@@ -271,8 +271,7 @@ public class StudentService {
         }
         Student student = repository.findStudentByUniversityId(studentUniId);
         StudentDto studentDTO = new StudentDto();
-        StudentMapper mapper = new StudentMapper();
-        studentDTO = mapper.studentToDto(student);
+        studentToStudentDtoConverter.convert(student,studentDTO);
         return studentDTO;
     }
 }
