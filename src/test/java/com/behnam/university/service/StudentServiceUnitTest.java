@@ -46,7 +46,7 @@ public class StudentServiceUnitTest {
                 studentRepository,
                 collegeRepository,
                 courseRepository,
-                null, null);
+                null, null, null);
         student1 = new Student();
         student2 = new Student();
         student3 = new Student();

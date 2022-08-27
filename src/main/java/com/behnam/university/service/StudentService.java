@@ -22,8 +22,6 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.*;
 
-import static java.util.stream.Collectors.toList;
-
 @Service
 public class StudentService {
 
@@ -32,6 +30,7 @@ public class StudentService {
     private final CourseRepository courseRepository;
     private final ProfessorRepository professorRepository;
     private final Converter<Student, StudentDto> studentToStudentDtoConverter;
+    private final Converter<StudentDto, Student> studentDtoToStudentConverter;
 
     @Autowired
     public StudentService(
@@ -39,12 +38,14 @@ public class StudentService {
             CollegeRepository collegeRepository,
             CourseRepository courseRepository,
             ProfessorRepository professorRepository,
-            Converter<Student, StudentDto> studentToStudentDtoConverter) {
+            Converter<Student, StudentDto> studentToStudentDtoConverter,
+            Converter<StudentDto, Student> studentDtoToStudentConverter) {
         this.repository = repository;
         this.collegeRepository = collegeRepository;
         this.courseRepository = courseRepository;
         this.professorRepository = professorRepository;
         this.studentToStudentDtoConverter = studentToStudentDtoConverter;
+        this.studentDtoToStudentConverter = studentDtoToStudentConverter;
     }
 
     public List<StudentDto> getAllStudents(Integer limit, Integer page) {
@@ -82,10 +83,7 @@ public class StudentService {
             }
             College college = collegeRepository
                     .findCollegeByCollegeName(collegeName);
-            // mapping to entity
-            Student student;
-            StudentMapper mapper = new StudentMapper();
-            student = mapper.dtoTOStudent(studentDto);
+
             if (repository.existsStudentByUniversityId(studentDto.getUniversityId())) {
                 throw new IllegalStateException("university id is taken");
             }
@@ -93,7 +91,11 @@ public class StudentService {
                     || professorRepository.existsProfessorByNationalId(studentDto.getNationalId())) {
                 throw new IllegalStateException("national id is taken");
             }
-
+            // mapping to entity
+            Student student = new Student();
+//            StudentMapper mapper = new StudentMapper();
+//            student = mapper.dtoTOStudent(studentDto);
+            studentDtoToStudentConverter.convert(studentDto, student);
             student.setStudentCollege(college);
             repository.save(student);
             return student;
