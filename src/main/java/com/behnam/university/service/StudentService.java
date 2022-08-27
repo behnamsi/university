@@ -3,6 +3,7 @@ package com.behnam.university.service;
 
 import com.behnam.university.dto.StudentDto;
 import com.behnam.university.mapper.StudentMapper;
+import com.behnam.university.mapper.generic_converter.Converter;
 import com.behnam.university.model.College;
 import com.behnam.university.model.Course;
 import com.behnam.university.model.Professor;
@@ -27,18 +28,23 @@ import static java.util.stream.Collectors.toList;
 public class StudentService {
 
     private final StudentRepository repository;
-
     private final CollegeRepository collegeRepository;
-
     private final CourseRepository courseRepository;
     private final ProfessorRepository professorRepository;
+    private final Converter<Student, StudentDto> studentToStudentDtoConverter;
 
     @Autowired
-    public StudentService(StudentRepository repository, CollegeRepository collegeRepository, CourseRepository courseRepository, ProfessorRepository professorRepository) {
+    public StudentService(
+            StudentRepository repository,
+            CollegeRepository collegeRepository,
+            CourseRepository courseRepository,
+            ProfessorRepository professorRepository,
+            Converter<Student, StudentDto> studentToStudentDtoConverter) {
         this.repository = repository;
         this.collegeRepository = collegeRepository;
         this.courseRepository = courseRepository;
         this.professorRepository = professorRepository;
+        this.studentToStudentDtoConverter = studentToStudentDtoConverter;
     }
 
     public List<StudentDto> getAllStudents(Integer limit, Integer page) {
@@ -52,12 +58,20 @@ public class StudentService {
                 PageRequest.of(page, limit, Sort.by("lastName").descending());
         Page<Student> studentPage = repository.findAll(studentPageable);
         // mapping data to dto
-        StudentMapper mapper = new StudentMapper();
-        return studentPage
-                .getContent()
-                .stream()
-                .map(mapper::studentToDto)
-                .collect(toList());
+        List<StudentDto> result = new ArrayList<>();
+        for (Student s :
+                studentPage.getContent()) {
+            StudentDto dto = new StudentDto();
+            studentToStudentDtoConverter.convert(s, dto);
+            result.add(dto);
+        }
+        return result;
+//        StudentMapper mapper = new StudentMapper();
+//        return studentPage
+//                .getContent()
+//                .stream()
+//                .map(mapper::studentToDto)
+//                .collect(toList());
     }
 
 

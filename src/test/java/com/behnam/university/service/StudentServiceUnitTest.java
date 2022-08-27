@@ -16,9 +16,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.*;
-
-import java.util.*;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.when;
@@ -49,7 +46,7 @@ public class StudentServiceUnitTest {
                 studentRepository,
                 collegeRepository,
                 courseRepository,
-                null);
+                null, null);
         student1 = new Student();
         student2 = new Student();
         student3 = new Student();
