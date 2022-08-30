@@ -1,13 +1,12 @@
 package com.behnam.university.controller;
 
-
-
 import com.behnam.university.dto.StudentDto;
-import com.behnam.university.service.StudentService;
+import com.behnam.university.service.interfaces.StudentService;
 import com.behnam.university.validation.annotations.ValidName;
 import com.behnam.university.validation.annotations.ValidNationalId;
 import com.behnam.university.validation.annotations.ValidSevenDigits;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,7 +17,11 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
+// end imports
 
+/**
+ * @author Behnam Si
+ */
 @RestController
 @RequestMapping(path = "api/students")
 @Validated
@@ -27,7 +30,8 @@ public class StudentController {
 
     //constructor
     @Autowired
-    public StudentController(StudentService service) {
+    public StudentController(
+            @Qualifier("studentServiceImp") StudentService service) {
         this.service = service;
     }
 

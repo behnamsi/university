@@ -1,10 +1,12 @@
-package com.behnam.university.service;
+package com.behnam.university.service.implemention;
 
 import com.behnam.university.dto.CollegeDto;
 import com.behnam.university.mapper.CollegeMapper;
 import com.behnam.university.model.College;
 import com.behnam.university.repository.CollegeRepository;
+import com.behnam.university.service.interfaces.CollegeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -16,16 +18,22 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-@Service
-public class CollegeService {
+/**
+ * @author Behnam Si
+ */
+
+@Service("collegeServiceImp")
+@Primary
+public class CollegeServiceImp implements CollegeService {
 
     private final CollegeRepository repository;
 
     @Autowired
-    public CollegeService(CollegeRepository repository) {
+    public CollegeServiceImp(CollegeRepository repository) {
         this.repository = repository;
     }
 
+    @Override
     public List<CollegeDto> getAllColleges(Integer page, Integer limit) {
         CollegeMapper mapper = new CollegeMapper();
         // page and limit filters
@@ -48,6 +56,7 @@ public class CollegeService {
         return resultColleges;
     }
 
+    @Override
     public College addCollege(CollegeDto collegeDto) {
         // turn into college
         CollegeMapper mapper = new CollegeMapper();
@@ -56,6 +65,7 @@ public class CollegeService {
         return repository.save(college);
     }
 
+    @Override
     @Transactional
     public void deleteCollege(String collegeName) {
         if (!repository.existsCollegeByCollegeName(collegeName)) {
@@ -64,6 +74,7 @@ public class CollegeService {
         repository.deleteCollegeByCollegeName(collegeName);
     }
 
+    @Override
     @Transactional
     public void updateCollege(Long collegeId, String collegeName) {
         if (!repository.existsById(collegeId)) throw new IllegalStateException("invalid college id");

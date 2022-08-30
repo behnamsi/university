@@ -2,31 +2,24 @@ package com.behnam.university.service;
 
 
 import com.behnam.university.dto.CourseDto;
-import com.behnam.university.mapper.CourseMapper;
 import com.behnam.university.model.College;
 import com.behnam.university.model.Course;
 import com.behnam.university.model.Professor;
 import com.behnam.university.repository.CourseRepository;
+import com.behnam.university.service.implemention.CourseServiceImp;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.*;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class CourseServiceUnitTest {
+class CourseServiceImpUnitTest {
 
     @Mock
     CourseRepository repository;
     @InjectMocks
-    CourseService courseService;
+    CourseServiceImp courseServiceImp;
 
     Course course1;
     Course course2;
@@ -37,7 +30,7 @@ class CourseServiceUnitTest {
 
     @BeforeEach
     void setUp() {
-        courseService = new CourseService(repository,null,null);
+        courseServiceImp = new CourseServiceImp(repository,null,null);
         college = new College();
         college.setCollegeId(1L);
         college.setCollegeName("computer");

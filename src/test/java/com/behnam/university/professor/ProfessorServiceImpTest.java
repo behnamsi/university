@@ -3,7 +3,7 @@ package com.behnam.university.professor;
 
 
 import com.behnam.university.dto.ProfessorDto;
-import com.behnam.university.service.ProfessorService;
+import com.behnam.university.service.implemention.ProfessorServiceImp;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -11,10 +11,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.List;
 
 @SpringBootTest
-class ProfessorServiceTest {
+class ProfessorServiceImpTest {
 
     @Autowired
-    ProfessorService service;
+    ProfessorServiceImp service;
 
 
     @Test

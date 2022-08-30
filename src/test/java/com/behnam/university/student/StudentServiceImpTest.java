@@ -2,7 +2,7 @@ package com.behnam.university.student;
 
 
 import com.behnam.university.dto.StudentDto;
-import com.behnam.university.service.StudentService;
+import com.behnam.university.service.implemention.StudentServiceImp;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,10 +13,10 @@ import java.util.List;
 
 @SpringBootTest
 @Validated
-class StudentServiceTest {
+class StudentServiceImpTest {
 
     @Autowired
-    private StudentService service;
+    private StudentServiceImp service;
 
     @Test
     void getAllStudents() {
