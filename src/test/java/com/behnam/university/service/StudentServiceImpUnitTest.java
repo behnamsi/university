@@ -9,6 +9,7 @@ import com.behnam.university.model.Student;
 import com.behnam.university.repository.CollegeRepository;
 import com.behnam.university.repository.CourseRepository;
 import com.behnam.university.repository.StudentRepository;
+import com.behnam.university.service.implemention.StudentServiceImp;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,7 +22,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class StudentServiceUnitTest {
+public class StudentServiceImpUnitTest {
 
 
     @Mock
@@ -31,7 +32,7 @@ public class StudentServiceUnitTest {
     @Mock
     CourseRepository courseRepository;
     @InjectMocks
-    StudentService service;
+    StudentServiceImp service;
 
     Student student1;
     Student student2;
@@ -42,7 +43,7 @@ public class StudentServiceUnitTest {
 
     @BeforeEach
     void setUp() {
-        service = new StudentService(
+        service = new StudentServiceImp(
                 studentRepository,
                 collegeRepository,
                 courseRepository,

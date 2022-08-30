@@ -1,8 +1,7 @@
-package com.behnam.university.service;
+package com.behnam.university.service.implemention;
 
 
 import com.behnam.university.dto.StudentDto;
-import com.behnam.university.mapper.StudentMapper;
 import com.behnam.university.mapper.generic_converter.Converter;
 import com.behnam.university.model.College;
 import com.behnam.university.model.Course;
@@ -12,7 +11,9 @@ import com.behnam.university.repository.CollegeRepository;
 import com.behnam.university.repository.CourseRepository;
 import com.behnam.university.repository.ProfessorRepository;
 import com.behnam.university.repository.StudentRepository;
+import com.behnam.university.service.interfaces.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -22,8 +23,13 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.*;
 
-@Service
-public class StudentService {
+/**
+ * @author Behnam Si
+ */
+
+@Service("studentServiceImp")
+@Primary
+public class StudentServiceImp implements StudentService {
 
     private final StudentRepository repository;
     private final CollegeRepository collegeRepository;
@@ -33,7 +39,7 @@ public class StudentService {
     private final Converter<StudentDto, Student> studentDtoToStudentConverter;
 
     @Autowired
-    public StudentService(
+    public StudentServiceImp(
             StudentRepository repository,
             CollegeRepository collegeRepository,
             CourseRepository courseRepository,
@@ -48,6 +54,7 @@ public class StudentService {
         this.studentDtoToStudentConverter = studentDtoToStudentConverter;
     }
 
+    @Override
     public List<StudentDto> getAllStudents(Integer limit, Integer page) {
         // limit and page filter
         if (limit == null) limit = 3;
@@ -75,7 +82,18 @@ public class StudentService {
 //                .collect(toList());
     }
 
+    @Override
+    public StudentDto getStudent(Long studentUniId) {
+        if (!repository.existsStudentByUniversityId(studentUniId)) {
+            throw new IllegalStateException("invalid uni id");
+        }
+        Student student = repository.findStudentByUniversityId(studentUniId);
+        StudentDto studentDTO = new StudentDto();
+        studentToStudentDtoConverter.convert(student, studentDTO);
+        return studentDTO;
+    }
 
+    @Override
     public Student addStudent(StudentDto studentDto, String collegeName) {
         if (collegeName != null) {
             if (!collegeRepository.existsCollegeByCollegeName(collegeName)) {
@@ -104,14 +122,14 @@ public class StudentService {
         }
     }
 
-//    @Transactional
+    //    @Transactional
 //    public void deleteStudent(Long id) {
 //        if (!repository.existsById(id)) {
 //            throw new IllegalStateException("student with this Id does not exists.");
 //        }
 //        repository.deleteById(id);
 //    }
-
+    @Override
     @Transactional
     public void deleteStudentByUniId(Long uniId) {
         if (!repository.existsStudentByUniversityId(uniId)) {
@@ -120,6 +138,7 @@ public class StudentService {
         repository.deleteStudentByUniversityId(uniId);
     }
 
+    @Override
     @Transactional
     public Student updateStudent(Long uniId, String first_name, String last_name, List<String> courses,
                                  Long nationalId) {
@@ -163,6 +182,7 @@ public class StudentService {
         return student;
     }
 
+    @Override
     @Transactional
     public List<String> getStudentCourses(Long uniId) {
         if (!repository.existsStudentByUniversityId(uniId)) {
@@ -176,6 +196,7 @@ public class StudentService {
         return courses;
     }
 
+    @Override
     @Transactional
     public void addScoreCourse(Long uniId, String courseName, Double score) {
 
@@ -207,6 +228,7 @@ public class StudentService {
     }
 
     // delete a course of a student
+    @Override
     @Transactional
     public void deleteStudentCourse(Long uniId, String courseName) {
         //TODO drop the professor of that course.
@@ -240,6 +262,7 @@ public class StudentService {
         student.setScores(studentScoresMap);
     }
 
+    @Override
     @Transactional
     public Double getStudentAverage(Long uniID) {
         if (!repository.existsStudentByUniversityId(uniID)) {
@@ -265,13 +288,4 @@ public class StudentService {
         return result;
     }
 
-    public StudentDto getStudent(Long studentUniId) {
-        if (!repository.existsStudentByUniversityId(studentUniId)) {
-            throw new IllegalStateException("invalid uni id");
-        }
-        Student student = repository.findStudentByUniversityId(studentUniId);
-        StudentDto studentDTO = new StudentDto();
-        studentToStudentDtoConverter.convert(student,studentDTO);
-        return studentDTO;
-    }
 }

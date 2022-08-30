@@ -1,4 +1,4 @@
-package com.behnam.university.service;
+package com.behnam.university.service.implemention;
 
 import com.behnam.university.dto.ProfessorDto;
 import com.behnam.university.mapper.ProfessorMapper;
@@ -9,7 +9,9 @@ import com.behnam.university.model.Student;
 import com.behnam.university.repository.CollegeRepository;
 import com.behnam.university.repository.ProfessorRepository;
 import com.behnam.university.repository.StudentRepository;
+import com.behnam.university.service.interfaces.ProfessorService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -21,20 +23,26 @@ import java.util.*;
 
 import static java.util.stream.Collectors.toList;
 
-@Service
-public class ProfessorService {
+/**
+ * @author Behnam Si
+ */
+
+@Service("professorServiceImp")
+@Primary
+public class ProfessorServiceImp implements ProfessorService {
 
     private final ProfessorRepository repository;
     private final StudentRepository studentRepository;
     private final CollegeRepository collegeRepository;
 
     @Autowired
-    public ProfessorService(ProfessorRepository repository, StudentRepository studentRepository, CollegeRepository collegeRepository) {
+    public ProfessorServiceImp(ProfessorRepository repository, StudentRepository studentRepository, CollegeRepository collegeRepository) {
         this.repository = repository;
         this.studentRepository = studentRepository;
         this.collegeRepository = collegeRepository;
     }
 
+    @Override
     public List<ProfessorDto> getAllProfessors(Integer page, Integer limit) {
         // limit and paging filter
         if (limit == null) limit = 3;
@@ -52,7 +60,7 @@ public class ProfessorService {
                 .map(mapper::professorToDto)
                 .collect(toList());
     }
-
+    @Override
     public void addProfessor(ProfessorDto professorDto, Long collegeId) {
         if (collegeId != null) {
             College college = collegeRepository.findById(collegeId).orElseThrow(() ->
@@ -76,6 +84,7 @@ public class ProfessorService {
         }
     }
 
+    @Override
     public void deleteProfessor(Long id) {
         if (!repository.existsById(id)) {
             throw new IllegalStateException("invalid id to delete professor.");
@@ -83,6 +92,7 @@ public class ProfessorService {
         repository.deleteById(id);
     }
 
+    @Override
     @Transactional
     public void updateProfessor(Long id, String first_name,
                                 String last_name, Long nationalId, Long personalId) {
@@ -113,6 +123,7 @@ public class ProfessorService {
         }
     }
 
+    @Override
     @Transactional
     public List<String> getProfessorStudents(Long professorId) {
         Professor professor = repository.findById(professorId).orElseThrow(
@@ -125,6 +136,7 @@ public class ProfessorService {
         return studentsName;
     }
 
+    @Override
     @Transactional
     public List<String> getProfessorStudentsAverages(Long professorId) {
         Professor professor = repository.findById(professorId).orElseThrow(
@@ -150,6 +162,7 @@ public class ProfessorService {
         return studentsAverageList;
     }
 
+    @Override
     @Transactional
     public List<String> getProfessorsCourses(Long professorId) {
 
@@ -164,6 +177,7 @@ public class ProfessorService {
 
     }
 
+    @Override
     @Transactional
     public List<String> getProfessorStudentsByCourse(Long professorId, String courseName) {
 
@@ -190,6 +204,7 @@ public class ProfessorService {
 
     }
 
+    @Override
     @Transactional
     public List<String> getProfessorStudentsAverageByCourse(Long professorId, String courseName) {
         Professor professor = repository.findById(professorId).orElseThrow(
@@ -230,6 +245,7 @@ public class ProfessorService {
         return studentAverages;
     }
 
+    @Override
     public ProfessorDto getProfessor(Long profId) {
         Professor professor = repository.findById(profId).orElseThrow(
                 () -> new IllegalStateException("invalid professor id")

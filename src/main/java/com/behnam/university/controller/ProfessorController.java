@@ -1,11 +1,12 @@
 package com.behnam.university.controller;
 
 import com.behnam.university.dto.ProfessorDto;
-import com.behnam.university.service.ProfessorService;
+import com.behnam.university.service.interfaces.ProfessorService;
 import com.behnam.university.validation.annotations.ValidName;
 import com.behnam.university.validation.annotations.ValidNationalId;
 import com.behnam.university.validation.annotations.ValidSevenDigits;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,7 +22,8 @@ public class ProfessorController {
     private final ProfessorService service;
 
     @Autowired
-    public ProfessorController(ProfessorService service) {
+    public ProfessorController(
+            @Qualifier("professorServiceImp") ProfessorService service) {
         this.service = service;
     }
 

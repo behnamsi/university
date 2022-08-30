@@ -1,11 +1,11 @@
 package com.behnam.university.controller;
 
 
-
 import com.behnam.university.dto.CourseDto;
-import com.behnam.university.service.CourseService;
+import com.behnam.university.service.interfaces.CourseService;
 import com.behnam.university.validation.annotations.ValidName;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,7 +22,8 @@ public class CourseController {
     private final CourseService service;
 
     @Autowired
-    public CourseController(CourseService service) {
+    public CourseController(
+            @Qualifier("courseServiceImp")CourseService service) {
         this.service = service;
     }
 
