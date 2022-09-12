@@ -1,4 +1,4 @@
-package com.behnam.university.dto;
+package com.behnam.university.dto.create;
 
 
 import com.behnam.university.validation.annotations.ValidNationalId;
@@ -8,7 +8,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-public class ProfessorDto {
+public class StudentCreateDto {
     @NotEmpty
     @NotNull
     @Size(min = 3, max = 20, message = "first name length must be between 3 and 20")
@@ -17,30 +17,21 @@ public class ProfessorDto {
     @NotNull
     @Size(min = 3, max = 20, message = "last name length must be between 3 and 20")
     private String lastName;
-    private String collegeName;
-    @NotNull
-    @ValidSevenDigits
-    private Long personalId;
     @NotNull
     @ValidNationalId
-    private Long nationalId;
+    private long nationalId;
+    @NotNull
+    @ValidSevenDigits
+    private long universityId;
 
-    public ProfessorDto() {
+    public StudentCreateDto() {
     }
 
-    public ProfessorDto(String firstName, String lastName, String collegeName, Long personalId, Long nationalId) {
+    public StudentCreateDto(String firstName, String lastName, long nationalId, long universityId) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.collegeName = collegeName;
-        this.personalId = personalId;
         this.nationalId = nationalId;
-    }
-
-    public ProfessorDto(String firstName, String lastName, Long personalId, Long nationalId) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.personalId = personalId;
-        this.nationalId = nationalId;
+        this.universityId = universityId;
     }
 
     public String getFirstName() {
@@ -59,38 +50,29 @@ public class ProfessorDto {
         this.lastName = lastName;
     }
 
-    public String getCollegeName() {
-        return collegeName;
-    }
-
-    public void setCollegeName(String collegeName) {
-        this.collegeName = collegeName;
-    }
-
-    public Long getPersonalId() {
-        return personalId;
-    }
-
-    public void setPersonalId(Long personalId) {
-        this.personalId = personalId;
-    }
-
-    public Long getNationalId() {
+    public long getNationalId() {
         return nationalId;
     }
 
-    public void setNationalId(Long nationalId) {
+    public void setNationalId(long nationalId) {
         this.nationalId = nationalId;
+    }
+
+    public long getUniversityId() {
+        return universityId;
+    }
+
+    public void setUniversityId(long universityId) {
+        this.universityId = universityId;
     }
 
     @Override
     public String toString() {
-        return "ProfessorDto{" +
+        return "StudentDto{" +
                 "firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
-                ", collegeName='" + collegeName + '\'' +
-                ", personalId=" + personalId +
                 ", nationalId=" + nationalId +
+                ", universityId=" + universityId +
                 '}';
     }
 }
