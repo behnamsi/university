@@ -9,7 +9,9 @@ import javax.validation.ConstraintValidatorContext;
 public class NationalIdValidator implements ConstraintValidator<ValidNationalId, Long> {
 
     @Override
-    public boolean isValid(Long aLong, ConstraintValidatorContext constraintValidatorContext) {
-        return aLong.toString().length() == 10 && aLong.toString().charAt(0) != '0';
+    public boolean isValid(Long nationalId, ConstraintValidatorContext constraintValidatorContext) {
+        if (nationalId != null)
+            return nationalId.toString().length() == 10 && nationalId.toString().charAt(0) != '0';
+        else return true;
     }
 }
