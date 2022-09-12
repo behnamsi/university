@@ -1,6 +1,12 @@
 package com.behnam.university.service.interfaces;
 
-import com.behnam.university.dto.CourseDto;
+import com.behnam.university.dto.create.CourseCreateDto;
+import com.behnam.university.dto.detail.CourseDetailDto;
+import com.behnam.university.dto.list.CollegeListDto;
+import com.behnam.university.dto.list.CourseListDto;
+import com.behnam.university.dto.update.CourseUpdateDto;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -10,15 +16,19 @@ import java.util.List;
  * @since 8/29/2022
  */
 
+@Service
 public interface CourseService {
 
-    List<CourseDto> getAllCourses(Integer page, Integer limit);
+    List<CourseCreateDto> getAllCourses(Integer page, Integer limit);
 
-    void addCourse(CourseDto courseDto, Long professorPersonalId, String collegeName);
+    List<CourseListDto> getAllCourses(Pageable pageable);
+
+    void addCourse(CourseCreateDto courseCreateDto, Long professorPersonalId, String collegeName);
 
     void deleteCourseByName(String courseName);
 
     void updateCourse(Long courseId, String courseName, Integer unitNumber, Long professorId);
+    void updateCourse(Long courseId, CourseUpdateDto dto);
 
-    CourseDto getCourse(Long courseId);
+    CourseDetailDto getCourse(Long courseId);
 }

@@ -1,7 +1,12 @@
 package com.behnam.university.service.interfaces;
 
-import com.behnam.university.dto.StudentDto;
+import com.behnam.university.dto.create.StudentCreateDto;
+import com.behnam.university.dto.detail.StudentDetailDto;
+import com.behnam.university.dto.list.StudentListDto;
+import com.behnam.university.dto.update.StudentUpdateDto;
 import com.behnam.university.model.Student;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -11,12 +16,17 @@ import java.util.List;
  * @since 8/29/2022
  */
 
+@Service
+
 public interface StudentService {
-    List<StudentDto> getAllStudents(Integer limit, Integer page);
+    List<StudentCreateDto> getAllStudents(Integer limit, Integer page);
 
-    StudentDto getStudent(Long studentUniId);
+    List<StudentListDto> getAllStudents(Pageable pageable);
 
-    Student addStudent(StudentDto studentDto, String collegeName);
+
+    StudentDetailDto getStudent(Long studentUniId);
+
+    Student addStudent(StudentCreateDto studentCreateDto, String collegeName);
 
     void deleteStudentByUniId(Long uniId);
 
@@ -26,7 +36,7 @@ public interface StudentService {
             String last_name,
             List<String> courses,
             Long nationalId);
-
+    void updateStudent(Long uniId, StudentUpdateDto dto);
     List<String> getStudentCourses(Long uniId);
 
     void addScoreCourse(

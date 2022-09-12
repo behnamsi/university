@@ -1,6 +1,11 @@
 package com.behnam.university.service.interfaces;
 
-import com.behnam.university.dto.ProfessorDto;
+import com.behnam.university.dto.create.ProfessorCreateDto;
+import com.behnam.university.dto.detail.ProfessorDetailDto;
+import com.behnam.university.dto.list.ProfessorListDto;
+import com.behnam.university.dto.update.ProfessorUpdateDto;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -10,17 +15,30 @@ import java.util.List;
  * @since 8/29/2022
  */
 
+@Service
 public interface ProfessorService {
-    List<ProfessorDto> getAllProfessors(Integer page, Integer limit);
-    void addProfessor(ProfessorDto professorDto, Long collegeId);
+    List<ProfessorCreateDto> getAllProfessors(Integer page, Integer limit);
+
+    List<ProfessorListDto> getAllProfessors(Pageable pageable);
+
+    void addProfessor(ProfessorCreateDto professorCreateDto, Long collegeId);
+
     void deleteProfessor(Long id);
+
     void updateProfessor(Long id, String first_name,
                          String last_name, Long nationalId, Long personalId);
+
+    void updateProfessor(Long profId, ProfessorUpdateDto dto);
     List<String> getProfessorStudents(Long professorId);
+
     List<String> getProfessorStudentsAverages(Long professorId);
+
     List<String> getProfessorsCourses(Long professorId);
+
     List<String> getProfessorStudentsByCourse(Long professorId, String courseName);
+
     List<String> getProfessorStudentsAverageByCourse(Long professorId, String courseName);
-    ProfessorDto getProfessor(Long profId);
+
+    ProfessorDetailDto getProfessor(Long profId);
 
 }

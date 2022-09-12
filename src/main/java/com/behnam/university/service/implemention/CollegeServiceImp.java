@@ -1,7 +1,11 @@
 package com.behnam.university.service.implemention;
 
-import com.behnam.university.dto.CollegeDto;
+import com.behnam.university.dto.create.CollegeCreateDto;
+import com.behnam.university.dto.detail.CollegeDetailDto;
+import com.behnam.university.dto.list.CollegeListDto;
+import com.behnam.university.dto.update.CollegeUpdateDto;
 import com.behnam.university.mapper.CollegeMapper;
+import com.behnam.university.mapper.static_mapper.StaticMapper;
 import com.behnam.university.model.College;
 import com.behnam.university.repository.CollegeRepository;
 import com.behnam.university.service.interfaces.CollegeService;
@@ -14,6 +18,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -34,7 +39,7 @@ public class CollegeServiceImp implements CollegeService {
     }
 
     @Override
-    public List<CollegeDto> getAllColleges(Integer page, Integer limit) {
+    public List<CollegeCreateDto> getAllColleges(Integer page, Integer limit) {
         CollegeMapper mapper = new CollegeMapper();
         // page and limit filters
         if (limit == null) limit = 3;
@@ -45,22 +50,53 @@ public class CollegeServiceImp implements CollegeService {
         Pageable collegePageable = PageRequest.of(page, limit, Sort.by("collegeName").ascending());
         Page<College> collegePage = repository.findAll(collegePageable);
         // turn them into college dto
-        List<CollegeDto> resultColleges = new ArrayList<CollegeDto>();
+        List<CollegeCreateDto> resultColleges = new ArrayList<CollegeCreateDto>();
         for (College college :
                 collegePage.getContent()) {
-            CollegeDto collegeDto = new CollegeDto();
-            collegeDto = mapper.toCollegeDto(college);
-            resultColleges.add(collegeDto);
+            CollegeCreateDto collegeCreateDto = new CollegeCreateDto();
+            collegeCreateDto = mapper.toCollegeDto(college);
+            resultColleges.add(collegeCreateDto);
         }
         // return the result
         return resultColleges;
     }
 
     @Override
-    public College addCollege(CollegeDto collegeDto) {
+    public List<CollegeListDto> getAllColleges(Pageable pageable) {
+        List<College> colleges = repository.findAll(pageable).getContent();
+        List<CollegeListDto> collegeDetailDTOS = new ArrayList<>();
+        for (College c :
+                colleges) {
+            CollegeListDto dto = new CollegeListDto();
+            try {
+                StaticMapper.mapper(c, dto);
+                collegeDetailDTOS.add(dto);
+            } catch (InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+        return collegeDetailDTOS;
+    }
+
+    @Override
+    public CollegeDetailDto getCollege(String collegeName) {
+        if (!repository.existsCollegeByCollegeName(collegeName))
+            throw new IllegalStateException("invalid college name");
+        College college = repository.findCollegeByCollegeName(collegeName);
+        CollegeDetailDto dto = new CollegeDetailDto();
+        try {
+            StaticMapper.mapper(college, dto);
+        } catch (InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return dto;
+    }
+
+    @Override
+    public College addCollege(CollegeCreateDto collegeCreateDto) {
         // turn into college
         CollegeMapper mapper = new CollegeMapper();
-        College college = mapper.toCollege(collegeDto);
+        College college = mapper.toCollege(collegeCreateDto);
         // saving to database
         return repository.save(college);
     }
@@ -82,6 +118,15 @@ public class CollegeServiceImp implements CollegeService {
         if (collegeName != null && collegeName.length() > 0
                 && !Objects.equals(collegeName, college.getCollegeName())) {
             college.setCollegeName(collegeName);
+        }
+    }
+
+    @Override
+    public void updateCollege(Long collegeId, CollegeUpdateDto dto) {
+        College college = repository.findById(collegeId).orElseThrow(()->
+                new IllegalStateException("invalid college id"));
+        if (dto.getCollegeName()!= null){
+            college.setCollegeName(dto.getCollegeName());
         }
     }
 

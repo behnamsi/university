@@ -1,6 +1,9 @@
 package com.behnam.university.service.implemention;
 
-import com.behnam.university.dto.ProfessorDto;
+import com.behnam.university.dto.create.ProfessorCreateDto;
+import com.behnam.university.dto.detail.ProfessorDetailDto;
+import com.behnam.university.dto.list.ProfessorListDto;
+import com.behnam.university.dto.update.ProfessorUpdateDto;
 import com.behnam.university.mapper.ProfessorMapper;
 import com.behnam.university.model.College;
 import com.behnam.university.model.Course;
@@ -19,8 +22,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
+import static com.behnam.university.mapper.static_mapper.StaticMapper.mapper;
 import static java.util.stream.Collectors.toList;
 
 /**
@@ -43,7 +48,7 @@ public class ProfessorServiceImp implements ProfessorService {
     }
 
     @Override
-    public List<ProfessorDto> getAllProfessors(Integer page, Integer limit) {
+    public List<ProfessorCreateDto> getAllProfessors(Integer page, Integer limit) {
         // limit and paging filter
         if (limit == null) limit = 3;
         if (page == null) page = 0;
@@ -60,21 +65,39 @@ public class ProfessorServiceImp implements ProfessorService {
                 .map(mapper::professorToDto)
                 .collect(toList());
     }
+
     @Override
-    public void addProfessor(ProfessorDto professorDto, Long collegeId) {
+    public List<ProfessorListDto> getAllProfessors(Pageable pageable) {
+        List<Professor> professors = repository.findAll(pageable).getContent();
+        List<ProfessorListDto> professorDetailDTOS = new ArrayList<>();
+        for (Professor p :
+                professors) {
+            ProfessorListDto dto = new ProfessorListDto();
+            try {
+                mapper(p, dto);
+                professorDetailDTOS.add(dto);
+            } catch (InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+        return professorDetailDTOS;
+    }
+
+    @Override
+    public void addProfessor(ProfessorCreateDto professorCreateDto, Long collegeId) {
         if (collegeId != null) {
             College college = collegeRepository.findById(collegeId).orElseThrow(() ->
                     new IllegalStateException("invalid college id"));
             // mapping to entity
             Professor professor;
             ProfessorMapper mapper = new ProfessorMapper();
-            professor = mapper.dtoTOProfessor(professorDto);
+            professor = mapper.dtoTOProfessor(professorCreateDto);
             // check for national and personal id
-            if (repository.existsProfessorByNationalId(professorDto.getNationalId())
-                    || studentRepository.existsStudentByNationalId(professorDto.getNationalId())) {
+            if (repository.existsProfessorByNationalId(professorCreateDto.getNationalId())
+                    || studentRepository.existsStudentByNationalId(professorCreateDto.getNationalId())) {
                 throw new IllegalStateException("national id has taken");
             }
-            if (repository.existsProfessorByPersonalId(professorDto.getPersonalId())) {
+            if (repository.existsProfessorByPersonalId(professorCreateDto.getPersonalId())) {
                 throw new IllegalStateException("personal id has taken");
             }
             professor.setProfessorCollege(college);
@@ -122,6 +145,28 @@ public class ProfessorServiceImp implements ProfessorService {
             professor.setPersonalId(personalId);
         }
     }
+
+
+    @Override
+    public void updateProfessor(Long profId, ProfessorUpdateDto dto) {
+        Professor professor = repository.findById(profId).orElseThrow(() -> new
+                IllegalStateException("invalid id to update professor."));
+
+        if (repository.existsProfessorByNationalId(dto.getNationalId())
+                || studentRepository.existsStudentByNationalId(dto.getNationalId())) {
+            throw new IllegalStateException("national id has owner");
+        }
+        if (dto.getFirstName() != null) {
+            professor.setFirstName(dto.getFirstName());
+        }
+        if (dto.getLastName() != null) {
+            professor.setLastName(dto.getLastName());
+        }
+        if (dto.getNationalId() != null) {
+            professor.setNationalId(dto.getNationalId());
+        }
+    }
+
 
     @Override
     @Transactional
@@ -246,11 +291,16 @@ public class ProfessorServiceImp implements ProfessorService {
     }
 
     @Override
-    public ProfessorDto getProfessor(Long profId) {
+    public ProfessorDetailDto getProfessor(Long profId) {
         Professor professor = repository.findById(profId).orElseThrow(
                 () -> new IllegalStateException("invalid professor id")
         );
-        ProfessorMapper mapper = new ProfessorMapper();
-        return mapper.professorToDto(professor);
+        ProfessorDetailDto dto = new ProfessorDetailDto();
+        try {
+            mapper(professor, dto);
+        } catch (InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return dto;
     }
 }

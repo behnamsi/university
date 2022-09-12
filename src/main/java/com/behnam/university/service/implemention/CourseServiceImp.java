@@ -1,7 +1,11 @@
 package com.behnam.university.service.implemention;
 
-import com.behnam.university.dto.CourseDto;
+import com.behnam.university.dto.create.CourseCreateDto;
+import com.behnam.university.dto.detail.CourseDetailDto;
+import com.behnam.university.dto.list.CourseListDto;
+import com.behnam.university.dto.update.CourseUpdateDto;
 import com.behnam.university.mapper.CourseMapper;
+import com.behnam.university.mapper.static_mapper.StaticMapper;
 import com.behnam.university.model.College;
 import com.behnam.university.model.Course;
 import com.behnam.university.model.Professor;
@@ -18,10 +22,14 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import static com.behnam.university.mapper.static_mapper.StaticMapper.mapper;
 import static java.util.stream.Collectors.toList;
+
 /**
  * @author Behnam Si
  */
@@ -43,7 +51,7 @@ public class CourseServiceImp implements CourseService {
     }
 
     @Override
-    public List<CourseDto> getAllCourses(Integer page, Integer limit) {
+    public List<CourseCreateDto> getAllCourses(Integer page, Integer limit) {
         CourseMapper mapper = new CourseMapper();
         // limit and paging filters
         if (limit == null) limit = 3;
@@ -61,7 +69,24 @@ public class CourseServiceImp implements CourseService {
     }
 
     @Override
-    public void addCourse(CourseDto courseDto, Long professorPersonalId, String collegeName) {
+    public List<CourseListDto> getAllCourses(Pageable pageable) {
+        List<Course> courses = repository.findAll(pageable).getContent();
+        List<CourseListDto> courseDetailDTOS = new ArrayList<>();
+        for (Course c :
+                courses) {
+            CourseListDto dto = new CourseListDto();
+            try {
+                StaticMapper.mapper(c, dto);
+                courseDetailDTOS.add(dto);
+            } catch (InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+        return courseDetailDTOS;
+    }
+
+    @Override
+    public void addCourse(CourseCreateDto courseCreateDto, Long professorPersonalId, String collegeName) {
         if (professorPersonalId != null && collegeName != null) {
             if (!professorRepository
                     .existsProfessorByPersonalId(professorPersonalId)) {
@@ -79,7 +104,7 @@ public class CourseServiceImp implements CourseService {
             // mapping to entity
             CourseMapper mapper = new CourseMapper();
             Course course;
-            course = mapper.dtoToCourse(courseDto);
+            course = mapper.dtoToCourse(courseCreateDto);
             course.setProfessor(professor);
             course.setCourseCollege(college);
             repository.save(course);
@@ -131,13 +156,39 @@ public class CourseServiceImp implements CourseService {
 
     }
 
+
     @Override
-    public CourseDto getCourse(Long courseId) {
+    public void updateCourse(Long courseId, CourseUpdateDto dto) {
+        Course course = repository.findById(courseId).orElseThrow(() -> new IllegalStateException("invalid" +
+                "course id to update"));
+        if (dto.getProfessorPersonalId() != null) {
+            if (!professorRepository.existsProfessorByPersonalId(dto.getProfessorPersonalId())) {
+                throw new IllegalStateException("professor with " + dto.getProfessorPersonalId() + " id is invalid");
+            }
+            Professor professor = professorRepository.findProfessorByPersonalId(dto.getProfessorPersonalId());
+            course.setProfessor(professor);
+        }
+        if (dto.getCourseName() != null) {
+            course.setCourseName(dto.getCourseName());
+        }
+        if (dto.getUnitNumber() != null) {
+            course.setUnitNumber(dto.getUnitNumber());
+        }
+    }
+
+
+    @Override
+    public CourseDetailDto getCourse(Long courseId) {
         Course course = repository.findById(courseId).orElseThrow(
                 () -> new IllegalStateException("invalid course id")
         );
-        CourseMapper mapper = new CourseMapper();
-        return mapper.courseToDto(course);
+        CourseDetailDto dto = new CourseDetailDto();
+        try {
+            mapper(course, dto);
+        } catch (InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return dto;
     }
 }
 
