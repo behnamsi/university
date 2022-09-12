@@ -1,5 +1,7 @@
 package com.behnam.university.model;
 
+import com.behnam.university.validation.annotations.ValidNationalId;
+import com.behnam.university.validation.annotations.ValidSevenDigits;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
@@ -32,9 +34,11 @@ public class Professor {
     private String lastName;
     @Column(nullable = false, unique = true)
     @NotNull
+    @ValidSevenDigits
     private Long personalId;
     @Column(nullable = false, unique = true)
     @NotNull
+    @ValidNationalId
     private Long nationalId;
 
 
