@@ -1,21 +1,27 @@
 package com.behnam.university.controller;
 
-import com.behnam.university.dto.StudentDto;
+import com.behnam.university.dto.create.StudentCreateDto;
+import com.behnam.university.dto.detail.StudentDetailDto;
+import com.behnam.university.dto.list.StudentListDto;
+import com.behnam.university.dto.update.StudentUpdateDto;
 import com.behnam.university.service.interfaces.StudentService;
 import com.behnam.university.validation.annotations.ValidName;
-import com.behnam.university.validation.annotations.ValidNationalId;
 import com.behnam.university.validation.annotations.ValidSevenDigits;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.SortDefault;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.List;
+
+import static org.springframework.data.domain.Sort.Direction.ASC;
 
 // end imports
 
@@ -39,15 +45,17 @@ public class StudentController {
 
     // get the all of students
     @GetMapping
-    public List<StudentDto> getAllStudents(
-            @RequestParam(required = false) @Min(1) Integer limit,
-            @RequestParam(required = false) @Min(1) Integer page
+    public List<StudentListDto> getAllStudents(
+            @RequestParam(required = false) @Min(0) Integer page,
+            @RequestParam(required = false) @Min(1) @Max(50) Integer size,
+            @SortDefault(value = "lastName", direction = ASC)
+            @PageableDefault(value = 10, page = 0) Pageable pageable
     ) {
-        return service.getAllStudents(limit, page);
+        return service.getAllStudents(pageable);
     }
 
     @GetMapping(path = "{studentUniId}")
-    public StudentDto getStudent(
+    public StudentDetailDto getStudent(
             @PathVariable("studentUniId") Long studentUniId
     ) {
         return service.getStudent(studentUniId);
@@ -71,7 +79,7 @@ public class StudentController {
     //POST methods
     @PostMapping
     public void addStudent(
-            @Valid @RequestBody StudentDto student,
+            @Valid @RequestBody StudentCreateDto student,
             @RequestParam @NotNull @ValidName String collegeName
     ) {
         service.addStudent(student, collegeName);
@@ -94,15 +102,20 @@ public class StudentController {
     }
 
     // update with university id
-    @PutMapping(path = "{uniId}")
-    public void updateStudent(
-            @PathVariable("uniId") @ValidSevenDigits Long uniId,
-            @RequestParam(required = false) @ValidName String first_name,
-            @RequestParam(required = false) @ValidName String last_name,
-            @RequestParam(required = false) @NotEmpty List<String> courses,
-            @RequestParam(required = false) @ValidNationalId Long nationalId
-    ) {
-        service.updateStudent(uniId, first_name, last_name, courses, nationalId);
+//    @PutMapping(path = "{uniId}")
+//    public void updateStudent(
+//            @PathVariable("uniId") @ValidSevenDigits Long uniId,
+//            @RequestParam(required = false)  String first_name,
+//            @RequestParam(required = false)  String last_name,
+//            @RequestParam(required = false) List<String> courses,
+//            @RequestParam(required = false)  Long nationalId
+//    ) {
+//        service.updateStudent(uniId, first_name, last_name, courses, nationalId);
+//    }
+    @PutMapping("{uniId}")
+    public void updateStudent(@PathVariable("uniId") Long uniId,
+                              @Valid @RequestBody StudentUpdateDto dto) {
+        service.updateStudent(uniId,dto);
     }
 
     // add course for student
