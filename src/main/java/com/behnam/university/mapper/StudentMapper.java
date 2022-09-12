@@ -1,30 +1,29 @@
 package com.behnam.university.mapper;
 
 
-import com.behnam.university.dto.StudentDto;
+import com.behnam.university.dto.create.StudentCreateDto;
 import com.behnam.university.model.Student;
 
 public class StudentMapper {
-    public StudentDto studentToDto(Student student){
+    public StudentCreateDto studentToDto(Student student){
         String firsName=student.getFirstName();
         String lastName=student.getLastName();
         String collegeName=student.getStudentCollege().getCollegeName();
         long nationalId=student.getNationalId();
         long universityId=student.getUniversityId();
-        return new StudentDto(
+        return new StudentCreateDto(
                 firsName,
                 lastName,
-                collegeName,
                 nationalId,
                 universityId
         );
     }
 
-    public Student dtoTOStudent(StudentDto studentDto){
-        String firsName=studentDto.getFirstName();
-        String lastName=studentDto.getLastName();
-        long nationalId=studentDto.getNationalId();
-        long universityId=studentDto.getUniversityId();
+    public Student dtoTOStudent(StudentCreateDto studentCreateDto){
+        String firsName= studentCreateDto.getFirstName();
+        String lastName= studentCreateDto.getLastName();
+        long nationalId= studentCreateDto.getNationalId();
+        long universityId= studentCreateDto.getUniversityId();
         return new Student(
                 firsName,
                 lastName,
