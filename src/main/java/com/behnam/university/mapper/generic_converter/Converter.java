@@ -45,14 +45,14 @@ public class Converter<T, K> {
                 convertCollegeEntityToDto(prototype, converted, prototypeClass, convertedClass);
                 return;
             // DTOs
-            case "com.behnam.university.dto.StudentDto":
-            case "com.behnam.university.dto.ProfessorDto":
+            case "com.behnam.university.dto.create.StudentDto":
+            case "com.behnam.university.dto.create.ProfessorDto":
                 convertStudentOrProfessorDtoToEntity(prototype, converted, prototypeClass, convertedClass);
                 return;
-            case "com.behnam.university.dto.CourseDto":
+            case "com.behnam.university.dto.create.CourseDto":
                 convertCourseDtoToEntity(prototype, converted, prototypeClass, convertedClass);
                 return;
-            case "com.behnam.university.dto.CollegeDto":
+            case "com.behnam.university.dto.create.CollegeDto":
                 convertCollegeDtoToEntity(prototype, converted, prototypeClass, convertedClass);
                 return;
             default:
@@ -270,7 +270,7 @@ public class Converter<T, K> {
             College college = (College) courseCollegeField.get(prototype);
             String collegeName = college.getCollegeName();
             // get the course dto fields.
-            Field courseNameDtoField = convertedClass.getDeclaredField("name");
+            Field courseNameDtoField = convertedClass.getDeclaredField("courseName");
             Field unitNumberDtoField = convertedClass.getDeclaredField("unitNumber");
             Field professorDtoField = convertedClass.getDeclaredField("professorOfCourse");
             Field collegeNameDtoField = convertedClass.getDeclaredField("collegeName");
@@ -303,7 +303,7 @@ public class Converter<T, K> {
         // get the course dto fields.
         Field courseNameFieldDto = null;
         try {
-            courseNameFieldDto = prototypeClass.getDeclaredField("name");
+            courseNameFieldDto = prototypeClass.getDeclaredField("courseName");
             Field unitNumberFieldDto = prototypeClass.getDeclaredField("unitNumber");
             Field professorFieldDto = prototypeClass.getDeclaredField("professorOfCourse");
             Field courseCollegeFieldDto = prototypeClass.getDeclaredField("collegeName");
@@ -356,7 +356,7 @@ public class Converter<T, K> {
                     .map(Course::getCourseName)
                     .collect(Collectors.toList());
             // get the college dto fields
-            Field collegeNameDto = convertedClass.getDeclaredField("name");
+            Field collegeNameDto = convertedClass.getDeclaredField("collegeName");
             Field coursesFieldDto = convertedClass.getDeclaredField("courses");
             // set the accessibility
             collegeNameDto.setAccessible(true);
@@ -382,7 +382,7 @@ public class Converter<T, K> {
         try {
 
             // get the dto fields
-            Field collegeNameFieldDto = prototypeClass.getDeclaredField("name");
+            Field collegeNameFieldDto = prototypeClass.getDeclaredField("collegeName");
             // set the accessibility
             collegeNameFieldDto.setAccessible(true);
             // get the data
