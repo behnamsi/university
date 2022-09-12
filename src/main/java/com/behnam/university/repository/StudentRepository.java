@@ -2,6 +2,7 @@ package com.behnam.university.repository;
 
 
 import com.behnam.university.model.Student;
+import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -15,8 +16,6 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
 //
 //    @Query("select s from Student  s where s.nationalId=?1")
 //    Optional<Student> findStudentByNationalId(Long nationalId);
-
-
     Student findStudentByUniversityId(Long uniId);
 
     Student findStudentByNationalId(Long nationalID);
