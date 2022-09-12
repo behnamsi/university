@@ -2,7 +2,7 @@ package com.behnam.university.professor;
 
 
 
-import com.behnam.university.dto.ProfessorDto;
+import com.behnam.university.dto.create.ProfessorCreateDto;
 import com.behnam.university.service.implemention.ProfessorServiceImp;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +19,8 @@ class ProfessorServiceImpTest {
 
     @Test
     void getAllProfessors() {
-        List<ProfessorDto> professorDTOS = service.getAllProfessors(1, 3);
-        System.out.println("professorDTOS = " + professorDTOS);
+        List<ProfessorCreateDto> professorCreateDTOS = service.getAllProfessors(1, 3);
+        System.out.println("professorDTOS = " + professorCreateDTOS);
     }
 
     @Test
@@ -57,12 +57,12 @@ class ProfessorServiceImpTest {
 
     @Test
     void addProfessor() {
-        ProfessorDto professorDTO = new ProfessorDto();
-        professorDTO.setFirstName("hadi");
-        professorDTO.setLastName("qul");
-        professorDTO.setNationalId(123456789L);
-        professorDTO.setPersonalId(987654321L);
-        service.addProfessor(professorDTO, 1L);
+        ProfessorCreateDto professorCreateDTO = new ProfessorCreateDto();
+        professorCreateDTO.setFirstName("hadi");
+        professorCreateDTO.setLastName("qul");
+        professorCreateDTO.setNationalId(123456789L);
+        professorCreateDTO.setPersonalId(987654321L);
+        service.addProfessor(professorCreateDTO, 1L);
     }
 
     @Test

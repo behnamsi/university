@@ -2,7 +2,7 @@ package com.behnam.university.service;
 
 
 
-import com.behnam.university.dto.CollegeDto;
+import com.behnam.university.dto.create.CollegeCreateDto;
 import com.behnam.university.model.College;
 import com.behnam.university.repository.CollegeRepository;
 import com.behnam.university.service.implemention.CollegeServiceImp;
@@ -29,9 +29,9 @@ class CollegeServiceImpUnitTest {
     College college1;
     College college2;
     College college3;
-    CollegeDto collegeDto1;
-    CollegeDto collegeDto2;
-    CollegeDto collegeDto3;
+    CollegeCreateDto collegeCreateDto1;
+    CollegeCreateDto collegeCreateDto2;
+    CollegeCreateDto collegeCreateDto3;
 
     @BeforeEach
     void setUp() {
@@ -39,9 +39,9 @@ class CollegeServiceImpUnitTest {
         college1 = new College();
         college2 = new College();
         college3 = new College();
-        collegeDto1 = new CollegeDto("computer");
-        collegeDto2 = new CollegeDto("electronic");
-        collegeDto3 = new CollegeDto("math");
+        collegeCreateDto1 = new CollegeCreateDto("computer");
+        collegeCreateDto2 = new CollegeCreateDto("electronic");
+        collegeCreateDto3 = new CollegeCreateDto("math");
         college1.setCollegeId(1L);
         college2.setCollegeId(2L);
         college3.setCollegeId(3L);
@@ -67,7 +67,7 @@ class CollegeServiceImpUnitTest {
 
     @Test
     void addCollege() {
-        College college = service.addCollege(collegeDto1);
+        College college = service.addCollege(collegeCreateDto1);
         assertThat(college.getCollegeName()).isEqualTo("computer");
         assertThat(college).isInstanceOf(College.class);
     }

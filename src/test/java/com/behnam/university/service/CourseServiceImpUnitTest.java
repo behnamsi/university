@@ -1,7 +1,7 @@
 package com.behnam.university.service;
 
 
-import com.behnam.university.dto.CourseDto;
+import com.behnam.university.dto.create.CourseCreateDto;
 import com.behnam.university.model.College;
 import com.behnam.university.model.Course;
 import com.behnam.university.model.Professor;
@@ -23,8 +23,8 @@ class CourseServiceImpUnitTest {
 
     Course course1;
     Course course2;
-    CourseDto courseDto1;
-    CourseDto courseDto2;
+    CourseCreateDto courseCreateDto1;
+    CourseCreateDto courseCreateDto2;
     College college;
     Professor professor;
 
@@ -48,7 +48,7 @@ class CourseServiceImpUnitTest {
         course2.setCourseId(2L);
         course1.setUnitNumber(3);
         course2.setUnitNumber(3);
-        courseDto2 = new CourseDto();
+        courseCreateDto2 = new CourseCreateDto();
         course1.setProfessor(professor);
         course2.setProfessor(professor);
         course1.setCourseCollege(college);
