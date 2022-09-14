@@ -84,7 +84,7 @@ public class ProfessorServiceImp implements ProfessorService {
     }
 
     @Override
-    public void addProfessor(ProfessorCreateDto professorCreateDto, Long collegeId) {
+    public ProfessorCreateDto addProfessor(ProfessorCreateDto professorCreateDto, Long collegeId) {
         if (collegeId != null) {
             College college = collegeRepository.findById(collegeId).orElseThrow(() ->
                     new IllegalStateException("invalid college id"));
@@ -105,14 +105,16 @@ public class ProfessorServiceImp implements ProfessorService {
         } else {
             throw new IllegalStateException("college id must be present.");
         }
+        return professorCreateDto;
     }
 
     @Override
-    public void deleteProfessor(Long id) {
+    public Long deleteProfessor(Long id) {
         if (!repository.existsById(id)) {
             throw new IllegalStateException("invalid id to delete professor.");
         }
         repository.deleteById(id);
+        return id;
     }
 
     @Override
@@ -148,7 +150,8 @@ public class ProfessorServiceImp implements ProfessorService {
 
 
     @Override
-    public void updateProfessor(Long profId, ProfessorUpdateDto dto) {
+    @Transactional
+    public ProfessorUpdateDto updateProfessor(Long profId, ProfessorUpdateDto dto) {
         Professor professor = repository.findById(profId).orElseThrow(() -> new
                 IllegalStateException("invalid id to update professor."));
 
@@ -165,6 +168,7 @@ public class ProfessorServiceImp implements ProfessorService {
         if (dto.getNationalId() != null) {
             professor.setNationalId(dto.getNationalId());
         }
+        return dto;
     }
 
 

@@ -21,14 +21,14 @@ public interface ProfessorService {
 
     List<ProfessorListDto> getAllProfessors(Pageable pageable);
 
-    void addProfessor(ProfessorCreateDto professorCreateDto, Long collegeId);
+    ProfessorCreateDto addProfessor(ProfessorCreateDto professorCreateDto, Long collegeId);
 
-    void deleteProfessor(Long id);
+    Long deleteProfessor(Long id);
 
     void updateProfessor(Long id, String first_name,
                          String last_name, Long nationalId, Long personalId);
 
-    void updateProfessor(Long profId, ProfessorUpdateDto dto);
+    ProfessorUpdateDto updateProfessor(Long profId, ProfessorUpdateDto dto);
     List<String> getProfessorStudents(Long professorId);
 
     List<String> getProfessorStudentsAverages(Long professorId);

@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.SortDefault;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,7 +22,9 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
+import static com.behnam.university.response.ResponseHandler.globalResponse;
 import static org.springframework.data.domain.Sort.Direction.ASC;
+import static org.springframework.http.HttpStatus.*;
 
 // end imports
 
@@ -45,95 +48,130 @@ public class StudentController {
 
     // get the all of students
     @GetMapping
-    public List<StudentListDto> getAllStudents(
+    public ResponseEntity<Object> getAllStudents(
             @RequestParam(required = false) @Min(0) Integer page,
             @RequestParam(required = false) @Min(1) @Max(50) Integer size,
             @SortDefault(value = "lastName", direction = ASC)
             @PageableDefault(value = 10, page = 0) Pageable pageable
     ) {
-        return service.getAllStudents(pageable);
+        try {
+            List<StudentListDto> result = service.getAllStudents(pageable);
+            String message = "get the data successfully";
+            return globalResponse(message, OK, result);
+        } catch (Exception e) {
+            return globalResponse(e.getMessage(), MULTI_STATUS, null);
+        }
     }
 
     @GetMapping(path = "{studentUniId}")
-    public StudentDetailDto getStudent(
+    public ResponseEntity<Object> getStudent(
             @PathVariable("studentUniId") Long studentUniId
     ) {
-        return service.getStudent(studentUniId);
+        try {
+            StudentDetailDto result = service.getStudent(studentUniId);
+            String message = "get the data successfully";
+            return globalResponse(message, OK, result);
+        } catch (Exception e) {
+            return globalResponse(e.getMessage(), MULTI_STATUS, null);
+        }
     }
 
     //get student courses using university id
     @GetMapping(path = "{uniID}/courses")
-    public List<String> getStudentCourses(
+    public ResponseEntity<Object> getStudentCourses(
             @PathVariable("uniID") @ValidSevenDigits Long uniID
     ) {
-        return service.getStudentCourses(uniID);
+        try {
+            List<String> result = service.getStudentCourses(uniID);
+            String message = "get the data successfully";
+            return globalResponse(message, OK, result);
+        } catch (Exception e) {
+            return globalResponse(e.getMessage(), MULTI_STATUS, null);
+        }
     }
 
     // get student average
     @GetMapping(path = "{uniID}/averages")
-    public Double getStudentAverage(@PathVariable("uniID") @ValidSevenDigits Long uniID) {
-        return service.getStudentAverage(uniID);
+    public ResponseEntity<Object> getStudentAverage(@PathVariable("uniID") @ValidSevenDigits Long uniID) {
+        try {
+            Double result = service.getStudentAverage(uniID);
+            String message = "get the data successfully";
+            return globalResponse(message, OK, result);
+        } catch (Exception e) {
+            return globalResponse(e.getMessage(), MULTI_STATUS, null);
+        }
     }
 
 
     //POST methods
     @PostMapping
-    public void addStudent(
+    public ResponseEntity<Object> addStudent(
             @Valid @RequestBody StudentCreateDto student,
             @RequestParam @NotNull @ValidName String collegeName
     ) {
-        service.addStudent(student, collegeName);
+        try {
+            StudentCreateDto result = service.addStudent(student, collegeName);
+            String message = "create the data successfully";
+            return globalResponse(message, CREATED, result);
+        } catch (Exception e) {
+            return globalResponse(e.getMessage(), MULTI_STATUS, null);
+        }
     }
 
-
-//    @DeleteMapping(path = "{id}/delete")
-//    public void deleteStudent(
-//            @PathVariable("id") @Min(1) Long id
-//    ) {
-//        service.deleteStudent(id);
-//    }
-
     @DeleteMapping(path = "{uniId}")
-    public void deleteStudentByUniId(
+    public ResponseEntity<Object> deleteStudentByUniId(
             @PathVariable("uniId") @ValidSevenDigits Long uniId
     ) {
 
-        service.deleteStudentByUniId(uniId);
+        try {
+            Long result = service.deleteStudentByUniId(uniId);
+            String message = "deleted the data successfully";
+            return globalResponse(message, OK, result);
+        } catch (Exception e) {
+            return globalResponse(e.getMessage(), MULTI_STATUS, null);
+        }
     }
 
-    // update with university id
-//    @PutMapping(path = "{uniId}")
-//    public void updateStudent(
-//            @PathVariable("uniId") @ValidSevenDigits Long uniId,
-//            @RequestParam(required = false)  String first_name,
-//            @RequestParam(required = false)  String last_name,
-//            @RequestParam(required = false) List<String> courses,
-//            @RequestParam(required = false)  Long nationalId
-//    ) {
-//        service.updateStudent(uniId, first_name, last_name, courses, nationalId);
-//    }
     @PutMapping("{uniId}")
-    public void updateStudent(@PathVariable("uniId") Long uniId,
-                              @Valid @RequestBody StudentUpdateDto dto) {
-        service.updateStudent(uniId,dto);
+    public ResponseEntity<Object> updateStudent(@PathVariable("uniId") Long uniId,
+                                                @Valid @RequestBody StudentUpdateDto dto) {
+        try {
+            StudentUpdateDto result = service.updateStudent(uniId, dto);
+            String message = "deleted the data successfully";
+            return globalResponse(message, OK, result);
+        } catch (Exception e) {
+            return globalResponse(e.getMessage(), MULTI_STATUS, null);
+        }
     }
 
     // add course for student
     @PutMapping(path = "{uniId}/courses/{courseName}/scores")
-    public void addScoreCourse(
+    public ResponseEntity<Object> addScoreCourse(
             @PathVariable("uniId") @ValidSevenDigits Long uniId,
             @PathVariable("courseName") @ValidName String courseName,
             @RequestParam @Min(0) @Max(20) Double score
     ) {
-        service.addScoreCourse(uniId, courseName, score);
+        try {
+            service.addScoreCourse(uniId, courseName, score);
+            String message = "score: " + score + " added to the course: " + courseName + " successfully";
+            return globalResponse(message, OK, null);
+        } catch (Exception e) {
+            return globalResponse(e.getMessage(), MULTI_STATUS, null);
+        }
     }
 
     // delete course for student
     @PutMapping(path = "{uniId}/courses/delete")
-    public void deleteStudentCourse(
+    public ResponseEntity<Object> deleteStudentCourse(
             @PathVariable("uniId") @ValidSevenDigits Long uniId,
             @RequestParam @ValidName String courseName
     ) {
-        service.deleteStudentCourse(uniId, courseName);
+        try {
+            service.deleteStudentCourse(uniId, courseName);
+            String message = "course: " + courseName + " deleted successfully";
+            return globalResponse(message, OK, null);
+        } catch (Exception e) {
+            return globalResponse(e.getMessage(), MULTI_STATUS, null);
+        }
     }
 }

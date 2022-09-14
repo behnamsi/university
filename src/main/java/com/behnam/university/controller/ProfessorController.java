@@ -4,6 +4,7 @@ import com.behnam.university.dto.create.ProfessorCreateDto;
 import com.behnam.university.dto.detail.ProfessorDetailDto;
 import com.behnam.university.dto.list.ProfessorListDto;
 import com.behnam.university.dto.update.ProfessorUpdateDto;
+import com.behnam.university.response.ResponseHandler;
 import com.behnam.university.service.interfaces.ProfessorService;
 import com.behnam.university.validation.annotations.ValidName;
 import com.behnam.university.validation.annotations.ValidNationalId;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.SortDefault;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,7 +23,9 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import java.util.List;
 
+import static com.behnam.university.response.ResponseHandler.globalResponse;
 import static org.springframework.data.domain.Sort.Direction.ASC;
+import static org.springframework.http.HttpStatus.*;
 
 @RestController
 @RequestMapping("api/professors")
@@ -43,96 +47,146 @@ public class ProfessorController {
 
     //get All Professors
     @GetMapping
-    public List<ProfessorListDto> getAllProfessors(
+    public ResponseEntity<Object> getAllProfessors(
             @RequestParam(required = false) @Min(0) Integer page,
             @RequestParam(required = false) @Min(1) @Max(50) Integer size,
             @SortDefault(value = "lastName", direction = ASC)
             @PageableDefault(value = 10, page = 0) Pageable pageable
     ) {
-        return service.getAllProfessors(pageable);
+       try {
+           List<ProfessorListDto> result = service.getAllProfessors(pageable);
+           String message = "get the data successfully";
+           return globalResponse(message, OK, result);
+       }catch (Exception e) {
+           return globalResponse(e.getMessage(), MULTI_STATUS, null);
+       }
     }
 
     @GetMapping(path = "{profId}")
-    public ProfessorDetailDto getProfessor(
+    public ResponseEntity<Object> getProfessor(
             @PathVariable("profId") @Min(1) Long profId
     ) {
-        return service.getProfessor(profId);
+        try {
+            ProfessorDetailDto result = service.getProfessor(profId);
+            String message = "get the data successfully";
+            return globalResponse(message, OK, result);
+        }catch (Exception e) {
+            return globalResponse(e.getMessage(), MULTI_STATUS, null);
+        }
     }
 
     // get all students that belong to a professor
     @GetMapping(path = "{professorId}/students")
-    public List<String> getProfessorStudents(
+    public ResponseEntity<Object> getProfessorStudents(
             @PathVariable("professorId") @Min(1) Long professorId
     ) {
-        return service.getProfessorStudents(professorId);
+        try {
+            List<String> result = service.getProfessorStudents(professorId);
+            String message = "get the data successfully";
+            return globalResponse(message, OK, result);
+        } catch (Exception e) {
+            return globalResponse(e.getMessage(), MULTI_STATUS, null);
+        }
     }
 
     // get all students averages that belong to a professor
     @GetMapping(path = "{professorId}/students/averages")
-    public List<String> getProfessorStudentsAverages(
+    public ResponseEntity<Object> getProfessorStudentsAverages(
             @PathVariable("professorId") @Min(1) Long professorId
     ) {
-        return service.getProfessorStudentsAverages(professorId);
+        try {
+            List<String> result = service.getProfessorStudentsAverages(professorId);
+            String message = "get the data successfully";
+            return globalResponse(message, OK, result);
+        }catch (Exception e) {
+            return globalResponse(e.getMessage(), MULTI_STATUS, null);
+        }
     }
 
     // get courses of a professor
     @GetMapping(path = "{professorId}/courses")
-    public List<String> getProfessorsCourses(
+    public ResponseEntity<Object> getProfessorsCourses(
             @PathVariable("professorId") @Min(1) Long professorId
     ) {
-        return service.getProfessorsCourses(professorId);
+        try {
+            List<String> result = service.getProfessorsCourses(professorId);
+            String message = "get the data successfully";
+            return globalResponse(message, OK, result);
+        }catch (Exception e) {
+            return globalResponse(e.getMessage(), MULTI_STATUS, null);
+        }
     }
 
     // get students of a course of professor
     @GetMapping(path = "{professorId}/courses/{courseName}/students")
-    public List<String> getProfessorStudentsByCourse(
+    public ResponseEntity<Object> getProfessorStudentsByCourse(
             @PathVariable("courseName") @ValidName String courseName,
             @PathVariable("professorId") @Min(1) Long professorId
     ) {
-        return service.getProfessorStudentsByCourse(professorId, courseName);
+       try {
+           List<String> result = service.getProfessorStudentsByCourse(professorId, courseName);
+           String message = "get the data successfully";
+           return globalResponse(message, OK, result);
+       }catch (Exception e) {
+           return globalResponse(e.getMessage(), MULTI_STATUS, null);
+       }
     }
 
     @GetMapping(path = "{professorId}/courses/{courseName}/students/averages")
-    public List<String> getProfessorStudentsAverageByCourse(
+    public ResponseEntity<Object> getProfessorStudentsAverageByCourse(
             @PathVariable("courseName") @ValidName String courseName,
             @PathVariable("professorId") @Min(1) Long professorId
     ) {
-        return service.getProfessorStudentsAverageByCourse(professorId, courseName);
+        try{
+            List<String> result = service.getProfessorStudentsAverageByCourse(professorId, courseName);
+            String message = "get the data successfully";
+            return globalResponse(message, OK, result);
+        }catch (Exception e) {
+            return globalResponse(e.getMessage(), MULTI_STATUS, null);
+        }
     }
 
 
     //POST methods:
 
     @PostMapping
-    public void addProfessor(
+    public ResponseEntity<Object> addProfessor(
             @Valid @RequestBody ProfessorCreateDto professorCreateDto,
             @RequestParam() @Min(1) Long collegeId
     ) {
-        service.addProfessor(professorCreateDto, collegeId);
+        try {
+            ProfessorCreateDto result = service.addProfessor(professorCreateDto, collegeId);
+            String message = "create the data successfully";
+            return globalResponse(message, CREATED, result);
+        }catch (Exception e) {
+            return globalResponse(e.getMessage(), MULTI_STATUS, null);
+        }
     }
 
     @DeleteMapping(path = "{profId}")
-    public void deleteProfessor(
+    public ResponseEntity<Object> deleteProfessor(
             @PathVariable("profId") @Min(1) Long id
     ) {
-        service.deleteProfessor(id);
+        try {
+            Long result = service.deleteProfessor(id);
+            String message = "delete the data successfully";
+            return globalResponse(message, CREATED, result);
+        }catch (Exception e) {
+            return globalResponse(e.getMessage(), MULTI_STATUS, null);
+        }
     }
 
-    //    @PutMapping(path = "{profId}")
-//    public void updateProfessor(
-//            @PathVariable("profId") @Min(1) Long id,
-//            @RequestParam(required = false) @ValidName String first_name,
-//            @RequestParam(required = false) @ValidName String last_name,
-//            @RequestParam(required = false) @ValidNationalId Long nationalId,
-//            @RequestParam(required = false) @ValidSevenDigits Long personalId
-//    ) {
-//        service.updateProfessor(id, first_name, last_name, nationalId, personalId);
-//    }
     @PutMapping("{profId}")
-    public void updateProfessor(
+    public ResponseEntity<Object> updateProfessor(
             @PathVariable("profId") Long profId,
             @Valid @RequestBody ProfessorUpdateDto dto
     ) {
-        service.updateProfessor(profId, dto);
+       try {
+           ProfessorUpdateDto result = service.updateProfessor(profId, dto);
+           String message = "updated the data successfully";
+           return globalResponse(message, CREATED, result);
+       }catch (Exception e) {
+           return globalResponse(e.getMessage(), MULTI_STATUS, null);
+       }
     }
 }

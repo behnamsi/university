@@ -5,6 +5,7 @@ import com.behnam.university.dto.create.CourseCreateDto;
 import com.behnam.university.dto.detail.CourseDetailDto;
 import com.behnam.university.dto.list.CourseListDto;
 import com.behnam.university.dto.update.CourseUpdateDto;
+import com.behnam.university.response.ResponseHandler;
 import com.behnam.university.service.interfaces.CourseService;
 import com.behnam.university.validation.annotations.ValidName;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.SortDefault;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,7 +24,9 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
+import static com.behnam.university.response.ResponseHandler.globalResponse;
 import static org.springframework.data.domain.Sort.Direction.ASC;
+import static org.springframework.http.HttpStatus.*;
 
 @RestController
 @RequestMapping(path = "api/courses")
@@ -36,50 +41,71 @@ public class CourseController {
     }
 
     @GetMapping
-    public List<CourseListDto> getAllCourses(
+    public ResponseEntity<Object> getAllCourses(
             @RequestParam(required = false) @Min(0) Integer page,
             @RequestParam(required = false) @Min(1) @Max(50) Integer size,
             @SortDefault(value = "courseName", direction = ASC)
             @PageableDefault(value = 10, page = 0) Pageable pageable
     ) {
-        return service.getAllCourses(pageable);
+        try {
+            List<CourseListDto> result = service.getAllCourses(pageable);
+            String message = "get the data successfully";
+            return globalResponse(message, OK, result);
+        } catch (Exception e) {
+            return globalResponse(e.getMessage(), MULTI_STATUS, null);
+        }
     }
 
     @GetMapping(path = "{courseId}")
-    public CourseDetailDto getCourse(
+    public ResponseEntity<Object> getCourse(
             @PathVariable("courseId") @Min(1) Long courseId
     ) {
-        return service.getCourse(courseId);
+        try {
+            CourseDetailDto result = service.getCourse(courseId);
+            String message = "get the data successfully";
+            return globalResponse(message, OK, result);
+        } catch (Exception e) {
+            return globalResponse(e.getMessage(), MULTI_STATUS, null);
+        }
     }
 
     @PostMapping
-    public void addCourse(@Valid @RequestBody CourseCreateDto courseCreateDto,
-                          @RequestParam() @Min(1) Long professorPersonalId,
-                          @RequestParam() @NotNull @ValidName String collegeName
+    public ResponseEntity<Object> addCourse(@Valid @RequestBody CourseCreateDto courseCreateDto,
+                                            @RequestParam() @Min(1) Long professorPersonalId,
+                                            @RequestParam() @NotNull @ValidName String collegeName
     ) {
-        service.addCourse(courseCreateDto, professorPersonalId, collegeName);
+        try {
+            CourseCreateDto result = service.addCourse(courseCreateDto, professorPersonalId, collegeName);
+            String message = "make the data successfully";
+            return globalResponse(message, CREATED, result);
+        } catch (Exception e) {
+            return globalResponse(e.getMessage(), MULTI_STATUS, null);
+        }
     }
 
     @DeleteMapping("{courseName}")
-    public void deleteCourseByName(
+    public ResponseEntity<Object> deleteCourseByName(
             @PathVariable("courseName") @ValidName String courseName
     ) {
-        service.deleteCourseByName(courseName);
+        try {
+            String result = service.deleteCourseByName(courseName);
+            String message = "deleted the data successfully";
+            return globalResponse(message, OK, result);
+        } catch (Exception e) {
+            return globalResponse(e.getMessage(), MULTI_STATUS, null);
+        }
     }
 
-    //    @PutMapping(path = "{courseId}")
-//    public void updateCourse(
-//            @PathVariable("courseId") @Min(1) Long courseId,
-//            @RequestParam(required = false) @ValidName String courseName,
-//            @RequestParam(required = false) @Min(1) @Max(3) Integer unitNumber,
-//            @RequestParam(required = false) Long professorId
-//    ) {
-//        service.updateCourse(courseId, courseName, unitNumber, professorId);
-//    }
     @PutMapping("{courseId}")
-    public void updateCourse(@PathVariable("courseId") Long courseId,
-                             @Valid @RequestBody CourseUpdateDto dto) {
-        service.updateCourse(courseId, dto);
+    public ResponseEntity<Object> updateCourse(@PathVariable("courseId") Long courseId,
+                                               @Valid @RequestBody CourseUpdateDto dto) {
+        try {
+            CourseUpdateDto result = service.updateCourse(courseId, dto);
+            String message = "updated the data successfully";
+            return globalResponse(message, OK, result);
+        } catch (Exception e) {
+            return globalResponse(e.getMessage(), MULTI_STATUS, null);
+        }
     }
 
 }

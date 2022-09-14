@@ -93,21 +93,23 @@ public class CollegeServiceImp implements CollegeService {
     }
 
     @Override
-    public College addCollege(CollegeCreateDto collegeCreateDto) {
+    public CollegeCreateDto addCollege(CollegeCreateDto collegeCreateDto) {
         // turn into college
         CollegeMapper mapper = new CollegeMapper();
         College college = mapper.toCollege(collegeCreateDto);
         // saving to database
-        return repository.save(college);
+        repository.save(college);
+        return collegeCreateDto;
     }
 
     @Override
     @Transactional
-    public void deleteCollege(String collegeName) {
+    public String deleteCollege(String collegeName) {
         if (!repository.existsCollegeByCollegeName(collegeName)) {
             throw new IllegalStateException("this college does not exists to delete.");
         }
         repository.deleteCollegeByCollegeName(collegeName);
+        return collegeName;
     }
 
     @Override
@@ -122,12 +124,14 @@ public class CollegeServiceImp implements CollegeService {
     }
 
     @Override
-    public void updateCollege(Long collegeId, CollegeUpdateDto dto) {
+    @Transactional
+    public CollegeUpdateDto updateCollege(Long collegeId, CollegeUpdateDto dto) {
         College college = repository.findById(collegeId).orElseThrow(()->
                 new IllegalStateException("invalid college id"));
         if (dto.getCollegeName()!= null){
             college.setCollegeName(dto.getCollegeName());
         }
+        return dto;
     }
 
 }

@@ -24,11 +24,11 @@ public interface CollegeService {
 
     CollegeDetailDto getCollege(String collegeName);
 
-    College addCollege(CollegeCreateDto collegeCreateDto);
+    CollegeCreateDto addCollege(CollegeCreateDto collegeCreateDto);
 
-    void deleteCollege(String collegeName);
+    String deleteCollege(String collegeName);
 
     void updateCollege(Long collegeId, String collegeName);
 
-    void updateCollege(Long collegeId, CollegeUpdateDto dto);
+    CollegeUpdateDto updateCollege(Long collegeId, CollegeUpdateDto dto);
 }

@@ -86,7 +86,7 @@ public class CourseServiceImp implements CourseService {
     }
 
     @Override
-    public void addCourse(CourseCreateDto courseCreateDto, Long professorPersonalId, String collegeName) {
+    public CourseCreateDto addCourse(CourseCreateDto courseCreateDto, Long professorPersonalId, String collegeName) {
         if (professorPersonalId != null && collegeName != null) {
             if (!professorRepository
                     .existsProfessorByPersonalId(professorPersonalId)) {
@@ -111,15 +111,17 @@ public class CourseServiceImp implements CourseService {
         } else {
             throw new IllegalStateException("could not add a course without college and professor");
         }
+        return courseCreateDto;
     }
 
     @Override
     @Transactional
-    public void deleteCourseByName(String courseName) {
+    public String deleteCourseByName(String courseName) {
         if (!repository.existsCourseByCourseName(courseName)) {
             throw new IllegalStateException("this course name is invalid");
         }
         repository.deleteCourseByCourseName(courseName);
+        return courseName;
     }
 
 //    @Transactional
@@ -158,7 +160,8 @@ public class CourseServiceImp implements CourseService {
 
 
     @Override
-    public void updateCourse(Long courseId, CourseUpdateDto dto) {
+    @Transactional
+    public CourseUpdateDto updateCourse(Long courseId, CourseUpdateDto dto) {
         Course course = repository.findById(courseId).orElseThrow(() -> new IllegalStateException("invalid" +
                 "course id to update"));
         if (dto.getProfessorPersonalId() != null) {
@@ -174,6 +177,7 @@ public class CourseServiceImp implements CourseService {
         if (dto.getUnitNumber() != null) {
             course.setUnitNumber(dto.getUnitNumber());
         }
+        return dto;
     }
 
 

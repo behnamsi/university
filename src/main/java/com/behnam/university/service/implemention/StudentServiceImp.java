@@ -122,7 +122,7 @@ public class StudentServiceImp implements StudentService {
     }
 
     @Override
-    public Student addStudent(StudentCreateDto studentCreateDto, String collegeName) {
+    public StudentCreateDto addStudent(StudentCreateDto studentCreateDto, String collegeName) {
         if (collegeName != null) {
             if (!collegeRepository.existsCollegeByCollegeName(collegeName)) {
                 throw new IllegalStateException("invalid college name");
@@ -144,7 +144,7 @@ public class StudentServiceImp implements StudentService {
             studentDtoToStudentConverter.convert(studentCreateDto, student);
             student.setStudentCollege(college);
             repository.save(student);
-            return student;
+            return studentCreateDto;
         } else {
             throw new IllegalStateException("college id can not be null");
         }
@@ -159,11 +159,12 @@ public class StudentServiceImp implements StudentService {
 //    }
     @Override
     @Transactional
-    public void deleteStudentByUniId(Long uniId) {
+    public Long deleteStudentByUniId(Long uniId) {
         if (!repository.existsStudentByUniversityId(uniId)) {
             throw new IllegalStateException("invalid university id.");
         }
         repository.deleteStudentByUniversityId(uniId);
+        return uniId;
     }
 
     @Override
@@ -215,7 +216,7 @@ public class StudentServiceImp implements StudentService {
 
     @Override
     @Transactional
-    public void updateStudent(Long uniId, StudentUpdateDto dto) {
+    public StudentUpdateDto updateStudent(Long uniId, StudentUpdateDto dto) {
         if (!repository.existsStudentByUniversityId(uniId)) {
             throw new IllegalStateException("student does not exists.");
         }
@@ -233,23 +234,25 @@ public class StudentServiceImp implements StudentService {
 
 
         // adding course/courses to the student with its professor
-        if (!dto.getCourses().isEmpty() || dto.getCourses() != null) {
-            for (String courseName :
-                    dto.getCourses()) {
-                if (!courseRepository.existsCourseByCourseName(courseName)) {
-                    throw new IllegalStateException("the course with name" + courseName + "is not available");
-                }
-                Course course = courseRepository.findCourseByCourseName(courseName);
-                Professor professor = course.getProfessor();
-                if (!student.getProfessorsOfStudent().contains(professor)) {
-                    student.getProfessorsOfStudent().add(professor);
+        if (dto.getCourses() != null) {
+            if (!dto.getCourses().isEmpty()){
+                for (String courseName :
+                        dto.getCourses()) {
+                    if (!courseRepository.existsCourseByCourseName(courseName)) {
+                        throw new IllegalStateException("the course with name" + courseName + "is not available");
+                    }
+                    Course course = courseRepository.findCourseByCourseName(courseName);
+                    Professor professor = course.getProfessor();
+                    if (!student.getProfessorsOfStudent().contains(professor)) {
+                        student.getProfessorsOfStudent().add(professor);
 
+                    }
+                    if (!student.getStudentCourses().contains(course)) {
+                        student.getStudentCourses().add(course);
+                    } else throw new IllegalStateException("this student already has this course");
                 }
-                if (!student.getStudentCourses().contains(course)) {
-                    student.getStudentCourses().add(course);
-                } else throw new IllegalStateException("this student already has this course");
-            }
 //            student.setStudentCourses(courses);
+            }
         }
         // end of course
 
@@ -257,7 +260,7 @@ public class StudentServiceImp implements StudentService {
         if (dto.getNationalId() != null) {
             student.setNationalId(dto.getNationalId());
         }
-
+    return dto;
     }
 
 

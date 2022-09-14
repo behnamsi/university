@@ -26,9 +26,9 @@ public interface StudentService {
 
     StudentDetailDto getStudent(Long studentUniId);
 
-    Student addStudent(StudentCreateDto studentCreateDto, String collegeName);
+    StudentCreateDto addStudent(StudentCreateDto studentCreateDto, String collegeName);
 
-    void deleteStudentByUniId(Long uniId);
+    Long deleteStudentByUniId(Long uniId);
 
     Student updateStudent(
             Long uniId,
@@ -36,7 +36,7 @@ public interface StudentService {
             String last_name,
             List<String> courses,
             Long nationalId);
-    void updateStudent(Long uniId, StudentUpdateDto dto);
+    StudentUpdateDto updateStudent(Long uniId, StudentUpdateDto dto);
     List<String> getStudentCourses(Long uniId);
 
     void addScoreCourse(

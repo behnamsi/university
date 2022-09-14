@@ -23,12 +23,12 @@ public interface CourseService {
 
     List<CourseListDto> getAllCourses(Pageable pageable);
 
-    void addCourse(CourseCreateDto courseCreateDto, Long professorPersonalId, String collegeName);
+    CourseCreateDto addCourse(CourseCreateDto courseCreateDto, Long professorPersonalId, String collegeName);
 
-    void deleteCourseByName(String courseName);
+    String deleteCourseByName(String courseName);
 
     void updateCourse(Long courseId, String courseName, Integer unitNumber, Long professorId);
-    void updateCourse(Long courseId, CourseUpdateDto dto);
+    CourseUpdateDto updateCourse(Long courseId, CourseUpdateDto dto);
 
     CourseDetailDto getCourse(Long courseId);
 }
