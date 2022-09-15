@@ -1,5 +1,6 @@
 package com.behnam.university.model;
 
+import com.behnam.university.validation.annotations.ValidName;
 import com.behnam.university.validation.annotations.ValidNationalId;
 import com.behnam.university.validation.annotations.ValidSevenDigits;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -23,14 +24,12 @@ public class Professor {
     @Column(updatable = false)
     private Long professorId;
     @Column(nullable = false, length = 20)
-    @NotEmpty
     @NotNull
-    @Size(min = 3, max = 20, message = "the length must be between 2 and 15")
+    @ValidName
     private String firstName;
     @Column(nullable = false, length = 20)
-    @NotEmpty
     @NotNull
-    @Size(min = 3, max = 20, message = "the length must be between 2 and 25")
+    @ValidName
     private String lastName;
     @Column(nullable = false, unique = true)
     @NotNull
@@ -51,7 +50,8 @@ public class Professor {
 
     @ManyToOne(
             cascade = CascadeType.MERGE,
-            fetch = FetchType.LAZY
+            fetch = FetchType.LAZY,
+            optional = false
     )
     @JoinColumn(
             name = "college_id",

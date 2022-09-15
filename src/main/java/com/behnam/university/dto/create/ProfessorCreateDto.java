@@ -1,6 +1,7 @@
 package com.behnam.university.dto.create;
 
 
+import com.behnam.university.validation.annotations.ValidName;
 import com.behnam.university.validation.annotations.ValidNationalId;
 import com.behnam.university.validation.annotations.ValidSevenDigits;
 
@@ -11,11 +12,11 @@ import javax.validation.constraints.Size;
 public class ProfessorCreateDto {
     @NotEmpty
     @NotNull
-    @Size(min = 3, max = 20, message = "first name length must be between 3 and 20")
+    @ValidName
     private String firstName;
     @NotEmpty
     @NotNull
-    @Size(min = 3, max = 20, message = "last name length must be between 3 and 20")
+    @ValidName
     private String lastName;
     @NotNull
     @ValidSevenDigits

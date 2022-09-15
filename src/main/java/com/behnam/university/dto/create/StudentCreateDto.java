@@ -10,14 +10,10 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 public class StudentCreateDto {
-    @NotEmpty
     @NotNull
-    @Size(min = 3, max = 20, message = "first name length must be between 3 and 20")
     @ValidName
     private String firstName;
-    @NotEmpty
     @NotNull
-    @Size(min = 3, max = 20, message = "last name length must be between 3 and 20")
     @ValidName
     private String lastName;
     @NotNull

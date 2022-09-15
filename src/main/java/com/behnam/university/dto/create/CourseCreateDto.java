@@ -1,12 +1,13 @@
 package com.behnam.university.dto.create;
 
 
+import com.behnam.university.validation.annotations.ValidName;
+
 import javax.validation.constraints.*;
 
 public class CourseCreateDto {
-    @NotEmpty
     @NotNull
-    @Size(min = 3, max = 20, message = "course name length must be between 3 and 20")
+    @ValidName
     private String courseName;
     @NotNull
     @Min(1)

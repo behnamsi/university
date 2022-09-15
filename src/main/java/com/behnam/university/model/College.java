@@ -1,5 +1,7 @@
 package com.behnam.university.model;
 
+import com.behnam.university.validation.annotations.ValidName;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -18,9 +20,8 @@ public class College {
     @Column(updatable = false)
     private Long collegeId;
     @Column(nullable = false, length = 20, unique = true)
-    @NotEmpty
     @NotNull
-    @Size(min = 3, max = 20)
+    @ValidName
     private String collegeName;
     @OneToMany(mappedBy = "studentCollege", cascade = CascadeType.MERGE, fetch = FetchType.LAZY,
             orphanRemoval = true)

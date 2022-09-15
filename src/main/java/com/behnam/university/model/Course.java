@@ -1,5 +1,6 @@
 package com.behnam.university.model;
 
+import com.behnam.university.validation.annotations.ValidName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
@@ -17,9 +18,8 @@ public class Course {
     @Column(updatable = false)
     private Long courseId;
     @Column(nullable = false, length = 20, unique = true)
-    @NotEmpty
     @NotNull
-    @Size(min = 3, max = 20)
+    @ValidName
     private String courseName;
     @Column(nullable = false)
     @Min(1) @Max(3)
