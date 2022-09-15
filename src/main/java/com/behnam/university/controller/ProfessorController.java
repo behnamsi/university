@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.SortDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -58,7 +59,7 @@ public class ProfessorController {
            String message = "get the data successfully";
            return globalResponse(message, OK, result);
        }catch (Exception e) {
-           return globalResponse(e.getMessage(), MULTI_STATUS, null);
+           return globalResponse(e.getMessage(), BAD_REQUEST, null);
        }
     }
 
@@ -71,7 +72,7 @@ public class ProfessorController {
             String message = "get the data successfully";
             return globalResponse(message, OK, result);
         }catch (Exception e) {
-            return globalResponse(e.getMessage(), MULTI_STATUS, null);
+            return globalResponse(e.getMessage(), BAD_REQUEST, null);
         }
     }
 
@@ -85,7 +86,7 @@ public class ProfessorController {
             String message = "get the data successfully";
             return globalResponse(message, OK, result);
         } catch (Exception e) {
-            return globalResponse(e.getMessage(), MULTI_STATUS, null);
+            return globalResponse(e.getMessage(), BAD_REQUEST, null);
         }
     }
 
@@ -99,7 +100,7 @@ public class ProfessorController {
             String message = "get the data successfully";
             return globalResponse(message, OK, result);
         }catch (Exception e) {
-            return globalResponse(e.getMessage(), MULTI_STATUS, null);
+            return globalResponse(e.getMessage(), BAD_REQUEST, null);
         }
     }
 
@@ -113,7 +114,7 @@ public class ProfessorController {
             String message = "get the data successfully";
             return globalResponse(message, OK, result);
         }catch (Exception e) {
-            return globalResponse(e.getMessage(), MULTI_STATUS, null);
+            return globalResponse(e.getMessage(), BAD_REQUEST, null);
         }
     }
 
@@ -128,7 +129,7 @@ public class ProfessorController {
            String message = "get the data successfully";
            return globalResponse(message, OK, result);
        }catch (Exception e) {
-           return globalResponse(e.getMessage(), MULTI_STATUS, null);
+           return globalResponse(e.getMessage(), BAD_REQUEST, null);
        }
     }
 
@@ -142,7 +143,7 @@ public class ProfessorController {
             String message = "get the data successfully";
             return globalResponse(message, OK, result);
         }catch (Exception e) {
-            return globalResponse(e.getMessage(), MULTI_STATUS, null);
+            return globalResponse(e.getMessage(), BAD_REQUEST, null);
         }
     }
 
@@ -159,7 +160,7 @@ public class ProfessorController {
             String message = "create the data successfully";
             return globalResponse(message, CREATED, result);
         }catch (Exception e) {
-            return globalResponse(e.getMessage(), MULTI_STATUS, null);
+            return globalResponse(e.getMessage(), BAD_REQUEST, null);
         }
     }
 
@@ -170,9 +171,9 @@ public class ProfessorController {
         try {
             Long result = service.deleteProfessor(id);
             String message = "delete the data successfully";
-            return globalResponse(message, CREATED, result);
+            return globalResponse(message, OK, result);
         }catch (Exception e) {
-            return globalResponse(e.getMessage(), MULTI_STATUS, null);
+            return globalResponse(e.getMessage(), BAD_REQUEST, null);
         }
     }
 
@@ -184,9 +185,9 @@ public class ProfessorController {
        try {
            ProfessorUpdateDto result = service.updateProfessor(profId, dto);
            String message = "updated the data successfully";
-           return globalResponse(message, CREATED, result);
+           return globalResponse(message, OK, result);
        }catch (Exception e) {
-           return globalResponse(e.getMessage(), MULTI_STATUS, null);
+           return globalResponse(e.getMessage(), BAD_REQUEST, null);
        }
     }
 }

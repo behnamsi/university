@@ -3,6 +3,8 @@ package com.behnam.university.service.interfaces;
 import com.behnam.university.dto.create.StudentCreateDto;
 import com.behnam.university.dto.detail.StudentDetailDto;
 import com.behnam.university.dto.list.StudentListDto;
+import com.behnam.university.dto.studentCourses.StudentAddCourseDto;
+import com.behnam.university.dto.studentCourses.StudentCourseScoreDto;
 import com.behnam.university.dto.update.StudentUpdateDto;
 import com.behnam.university.model.Student;
 import org.springframework.data.domain.Pageable;
@@ -44,8 +46,14 @@ public interface StudentService {
             String courseName,
             Double score);
 
+    void addScoreCourse(
+            Long uniId,
+            StudentCourseScoreDto dto);
+
     void deleteStudentCourse(Long uniId, String courseName);
 
     Double getStudentAverage(Long uniID);
+
+    void addCourseToEnrolledCourse(Long uniId, StudentAddCourseDto dto);
 }
 

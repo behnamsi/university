@@ -52,7 +52,7 @@ public class CourseController {
             String message = "get the data successfully";
             return globalResponse(message, OK, result);
         } catch (Exception e) {
-            return globalResponse(e.getMessage(), MULTI_STATUS, null);
+            return globalResponse(e.getMessage(), BAD_REQUEST, null);
         }
     }
 
@@ -65,21 +65,21 @@ public class CourseController {
             String message = "get the data successfully";
             return globalResponse(message, OK, result);
         } catch (Exception e) {
-            return globalResponse(e.getMessage(), MULTI_STATUS, null);
+            return globalResponse(e.getMessage(), BAD_REQUEST, null);
         }
     }
 
     @PostMapping
     public ResponseEntity<Object> addCourse(@Valid @RequestBody CourseCreateDto courseCreateDto,
-                                            @RequestParam() @Min(1) Long professorPersonalId,
-                                            @RequestParam() @NotNull @ValidName String collegeName
+                                            @RequestParam("profId") @Min(1) Long professorPersonalId,
+                                            @RequestParam("collegeName") @NotNull @ValidName String collegeName
     ) {
         try {
             CourseCreateDto result = service.addCourse(courseCreateDto, professorPersonalId, collegeName);
             String message = "make the data successfully";
             return globalResponse(message, CREATED, result);
         } catch (Exception e) {
-            return globalResponse(e.getMessage(), MULTI_STATUS, null);
+            return globalResponse(e.getMessage(), BAD_REQUEST, null);
         }
     }
 
@@ -92,7 +92,7 @@ public class CourseController {
             String message = "deleted the data successfully";
             return globalResponse(message, OK, result);
         } catch (Exception e) {
-            return globalResponse(e.getMessage(), MULTI_STATUS, null);
+            return globalResponse(e.getMessage(), BAD_REQUEST, null);
         }
     }
 
@@ -104,7 +104,7 @@ public class CourseController {
             String message = "updated the data successfully";
             return globalResponse(message, OK, result);
         } catch (Exception e) {
-            return globalResponse(e.getMessage(), MULTI_STATUS, null);
+            return globalResponse(e.getMessage(), BAD_REQUEST, null);
         }
     }
 
