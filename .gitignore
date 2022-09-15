@@ -20,7 +20,6 @@ target/
 *.ipr
 resources
 .gitignore
-TODOs.java
 
 ### NetBeans ###
 /nbproject/private/
