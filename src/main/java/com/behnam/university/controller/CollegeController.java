@@ -52,7 +52,7 @@ public class CollegeController {
             String message = "get the data successfully";
             return globalResponse(message, OK, result);
         } catch (Exception e) {
-            return globalResponse(e.getMessage(), MULTI_STATUS, null);
+            return globalResponse(e.getMessage(), BAD_REQUEST, null);
         }
     }
 
@@ -63,7 +63,7 @@ public class CollegeController {
             String message = "get the data successfully";
             return globalResponse(message, OK, result);
         } catch (Exception e) {
-            return globalResponse(e.getMessage(), MULTI_STATUS, null);
+            return globalResponse(e.getMessage(), BAD_REQUEST, null);
         }
     }
 
@@ -74,7 +74,7 @@ public class CollegeController {
             String message = "college successfully added";
             return globalResponse(message, CREATED, result);
         } catch (Exception e) {
-            return globalResponse(e.getMessage(), MULTI_STATUS, null);
+            return globalResponse(e.getMessage(), BAD_REQUEST, null);
         }
     }
 
@@ -87,7 +87,7 @@ public class CollegeController {
             String message = "college successfully deleted";
             return globalResponse(message, OK, result);
         } catch (Exception e) {
-            return globalResponse(e.getMessage(), MULTI_STATUS, null);
+            return globalResponse(e.getMessage(), BAD_REQUEST, null);
         }
     }
 
@@ -102,7 +102,7 @@ public class CollegeController {
             String message = "college successfully updated";
             return globalResponse(message, OK, result);
         } catch (Exception e) {
-            return globalResponse(e.getMessage(), MULTI_STATUS, null);
+            return globalResponse(e.getMessage(), BAD_REQUEST, null);
         }
     }
 }
