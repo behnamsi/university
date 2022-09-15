@@ -3,6 +3,8 @@ package com.behnam.university.dto.update;
 import com.behnam.university.validation.annotations.ValidName;
 import com.behnam.university.validation.annotations.ValidSevenDigits;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
 
 /**
@@ -13,8 +15,8 @@ import javax.validation.constraints.Size;
 
 public class CourseUpdateDto {
     @ValidName
-    private String CourseName;
-    @Size(min = 1, max = 3)
+    private String courseName;
+    @Min(1) @Max(3)
     private Integer unitNumber;
     @ValidSevenDigits
     private Long professorPersonalId;
@@ -23,17 +25,17 @@ public class CourseUpdateDto {
     }
 
     public CourseUpdateDto(String courseName, Integer unitNumber, Long professorPersonalId) {
-        CourseName = courseName;
+        this.courseName = courseName;
         this.unitNumber = unitNumber;
         this.professorPersonalId = professorPersonalId;
     }
 
     public String getCourseName() {
-        return CourseName;
+        return courseName;
     }
 
     public void setCourseName(String courseName) {
-        CourseName = courseName;
+        this.courseName = courseName;
     }
 
     public Integer getUnitNumber() {
@@ -55,7 +57,7 @@ public class CourseUpdateDto {
     @Override
     public String toString() {
         return "CourseUpdateDto{" +
-                "CourseName='" + CourseName + '\'' +
+                "CourseName='" + courseName + '\'' +
                 ", unitNumber=" + unitNumber +
                 ", professorPersonalId=" + professorPersonalId +
                 '}';
