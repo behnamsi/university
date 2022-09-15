@@ -4,6 +4,8 @@ package com.behnam.university.service.implemention;
 import com.behnam.university.dto.create.StudentCreateDto;
 import com.behnam.university.dto.detail.StudentDetailDto;
 import com.behnam.university.dto.list.StudentListDto;
+import com.behnam.university.dto.studentCourses.StudentAddCourseDto;
+import com.behnam.university.dto.studentCourses.StudentCourseScoreDto;
 import com.behnam.university.dto.update.StudentUpdateDto;
 import com.behnam.university.mapper.generic_converter.Converter;
 import com.behnam.university.mapper.static_mapper.StaticMapper;
@@ -235,7 +237,7 @@ public class StudentServiceImp implements StudentService {
 
         // adding course/courses to the student with its professor
         if (dto.getCourses() != null) {
-            if (!dto.getCourses().isEmpty()){
+            if (!dto.getCourses().isEmpty()) {
                 for (String courseName :
                         dto.getCourses()) {
                     if (!courseRepository.existsCourseByCourseName(courseName)) {
@@ -260,7 +262,7 @@ public class StudentServiceImp implements StudentService {
         if (dto.getNationalId() != null) {
             student.setNationalId(dto.getNationalId());
         }
-    return dto;
+        return dto;
     }
 
 
@@ -306,6 +308,33 @@ public class StudentServiceImp implements StudentService {
 
         Map<String, Double> scoreCourse = student.getScores();
         scoreCourse.put(courseName, score);
+        student.setScores(scoreCourse);
+    }
+
+    @Override
+    @Transactional
+    public void addScoreCourse(Long uniId, StudentCourseScoreDto dto) {
+        if (!repository.existsStudentByUniversityId(uniId))
+            throw new IllegalStateException("invalid university id");
+
+        if (!courseRepository.existsCourseByCourseName(dto.getCourseName()))
+            throw new IllegalStateException("invalid course name");
+
+        Student student = repository.findStudentByUniversityId(uniId);
+        List<Course> courseList = student.getStudentCourses();
+        boolean courseFlag = false;
+        for (Course course : courseList) {
+            if (course.getCourseName().equals(dto.getCourseName())) {
+                courseFlag = true;
+                break;
+            }
+        }
+        if (!courseFlag) {
+            throw new IllegalStateException("course not defined for this student");
+        }
+
+        Map<String, Double> scoreCourse = student.getScores();
+        scoreCourse.put(dto.getCourseName(), dto.getScore());
         student.setScores(scoreCourse);
     }
 
@@ -380,6 +409,28 @@ public class StudentServiceImp implements StudentService {
         }
         result = sum / numOfUnits;
         return result;
+    }
+
+    @Override
+    @Transactional
+    public void addCourseToEnrolledCourse(Long uniId, StudentAddCourseDto dto) {
+        if (!repository.existsStudentByUniversityId(uniId))
+            throw new IllegalStateException("invalid university id");
+
+        if (!courseRepository.existsCourseByCourseName(dto.getCourseName())) {
+            throw new IllegalStateException("the course with name" + dto.getCourseName() + "is not available");
+        }
+        Student student = repository.findStudentByUniversityId(uniId);
+        Course course = courseRepository.findCourseByCourseName(dto.getCourseName());
+        Professor professor = course.getProfessor();
+        if (!student.getProfessorsOfStudent().contains(professor)) {
+            student.getProfessorsOfStudent().add(professor);
+
+        }
+        if (!student.getStudentCourses().contains(course)) {
+            student.getStudentCourses().add(course);
+        } else throw new IllegalStateException("this student already has this course");
+
     }
 
 }
