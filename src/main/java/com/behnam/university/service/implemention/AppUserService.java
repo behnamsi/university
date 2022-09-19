@@ -1,0 +1,91 @@
+package com.behnam.university.service.implemention;
+
+import com.behnam.university.dto.appUser.AppUserCreateDto;
+import com.behnam.university.dto.appUser.AppUserListDto;
+import com.behnam.university.mapper.static_mapper.StaticMapper;
+import com.behnam.university.model.AppUser;
+import com.behnam.university.repository.AppUserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.behnam.university.security.roles.AppUserRoles.MANAGER;
+
+/**
+ * @author Behnam Si (https://github.com/behnamsi/)
+ * @version 1.0
+ * @since 9/18/2022
+ */
+
+@Service
+@Primary
+public class AppUserService implements UserDetailsService {
+
+    private final AppUserRepository repository;
+    private final PasswordEncoder encoder;
+
+    @Autowired
+    public AppUserService(AppUserRepository repository, PasswordEncoder encoder) {
+        this.repository = repository;
+        this.encoder = encoder;
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        AppUser user = repository.findAppUserByUsername(username)
+                .orElseThrow(() -> new IllegalStateException("invalid username"));
+        int size = user.getAuthorities().size();
+        return user;
+    }
+
+    public List<AppUserListDto> getAllUsers(Pageable pageable) {
+        List<AppUser> users = repository.findAll(pageable).getContent();
+        List<AppUserListDto> listDto = new ArrayList<>();
+        for (AppUser u :
+                users) {
+            try {
+                AppUserListDto dto = new AppUserListDto();
+                StaticMapper.mapper(u, dto);
+                listDto.add(dto);
+            } catch (InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
+                e.printStackTrace();
+                throw new IllegalStateException("could not get the list");
+            }
+        }
+        return listDto;
+    }
+
+    public void addUser(AppUserCreateDto dto) {
+        String username = dto.getUsername();
+        String password = dto.getPassword();
+        if (repository.existsAppUserByUsername(username)) {
+            throw new IllegalStateException("username has already taken");
+        }
+        if (!password.equals(dto.getConfirmPassword()))
+            throw new IllegalStateException("password and confirm password dose not match");
+        if (dto.getPassword().length() < 8)
+            throw new IllegalStateException("password not strong");
+        AppUser user = new AppUser(MANAGER.getAuthorities(),
+                username,
+                password,
+                true, true, true, true);
+
+        user.setPassword(encoder.encode(user.getPassword()));
+        repository.save(user);
+    }
+
+    @Transactional
+    public void deleteUser(String username) {
+        repository.deleteAppUserByUsername(username);
+    }
+}
