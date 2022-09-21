@@ -1,9 +1,9 @@
 package com.behnam.university.service.implemention;
 
-import com.behnam.university.dto.create.CourseCreateDto;
-import com.behnam.university.dto.detail.CourseDetailDto;
-import com.behnam.university.dto.list.CourseListDto;
-import com.behnam.university.dto.update.CourseUpdateDto;
+import com.behnam.university.dto.course.CourseCreateDto;
+import com.behnam.university.dto.course.CourseDetailDto;
+import com.behnam.university.dto.course.CourseListDto;
+import com.behnam.university.dto.course.CourseUpdateDto;
 import com.behnam.university.mapper.CourseMapper;
 import com.behnam.university.mapper.static_mapper.StaticMapper;
 import com.behnam.university.model.College;

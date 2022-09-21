@@ -1,9 +1,9 @@
 package com.behnam.university.mapper.static_mapper;
 
-import com.behnam.university.dto.create.ProfessorCreateDto;
-import com.behnam.university.dto.create.StudentCreateDto;
-import com.behnam.university.dto.detail.ProfessorDetailDto;
-import com.behnam.university.dto.detail.StudentDetailDto;
+import com.behnam.university.dto.professor.ProfessorCreateDto;
+import com.behnam.university.dto.student.StudentCreateDto;
+import com.behnam.university.dto.professor.ProfessorDetailDto;
+import com.behnam.university.dto.student.StudentDetailDto;
 import com.behnam.university.model.College;
 import com.behnam.university.model.Professor;
 import com.behnam.university.model.Student;

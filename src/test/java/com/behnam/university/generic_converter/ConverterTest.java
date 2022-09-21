@@ -1,9 +1,9 @@
 package com.behnam.university.generic_converter;
 
-import com.behnam.university.dto.create.CollegeCreateDto;
-import com.behnam.university.dto.create.CourseCreateDto;
-import com.behnam.university.dto.create.ProfessorCreateDto;
-import com.behnam.university.dto.create.StudentCreateDto;
+import com.behnam.university.dto.college.CollegeCreateDto;
+import com.behnam.university.dto.course.CourseCreateDto;
+import com.behnam.university.dto.professor.ProfessorCreateDto;
+import com.behnam.university.dto.student.StudentCreateDto;
 import com.behnam.university.mapper.generic_converter.Converter;
 import com.behnam.university.model.College;
 import com.behnam.university.model.Course;

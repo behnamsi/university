@@ -17,13 +17,10 @@ import static com.behnam.university.security.roles.AppUserPermission.*;
 
 public enum AppUserRoles {
     STUDENT(Sets.newHashSet(
-            STUDENT_READ,
             COLLEGE_READ,
             COURSE_READ)),
 
     PROFESSOR(Sets.newHashSet(
-            PROFESSOR_READ,
-            STUDENT_READ,
             COLLEGE_READ,
             COURSE_READ)),
     MANAGER(Sets.newHashSet(

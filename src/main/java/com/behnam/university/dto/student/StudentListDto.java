@@ -1,4 +1,4 @@
-package com.behnam.university.dto.list;
+package com.behnam.university.dto.student;
 
 /**
  * @author Behnam Si (https://github.com/behnamsi/)
@@ -6,24 +6,16 @@ package com.behnam.university.dto.list;
  * @since 9/12/2022
  */
 
-public class ProfessorListDto {
+public class StudentListDto {
     private String firstName;
     private String lastName;
 
-    public ProfessorListDto() {
+    public StudentListDto() {
     }
 
-    public ProfessorListDto(String firstName, String lastName) {
+    public StudentListDto(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
-    }
-
-    @Override
-    public String toString() {
-        return "ProfessorListDto{" +
-                "firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                '}';
     }
 
     public String getFirstName() {
@@ -40,5 +32,13 @@ public class ProfessorListDto {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    @Override
+    public String toString() {
+        return "StudentListDto{" +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                '}';
     }
 }

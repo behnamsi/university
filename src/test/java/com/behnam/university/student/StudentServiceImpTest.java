@@ -1,7 +1,7 @@
 package com.behnam.university.student;
 
 
-import com.behnam.university.dto.create.StudentCreateDto;
+import com.behnam.university.dto.student.StudentCreateDto;
 import com.behnam.university.service.implemention.StudentServiceImp;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

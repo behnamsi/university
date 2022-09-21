@@ -1,14 +1,9 @@
 package com.behnam.university.controller;
 
-import com.behnam.university.dto.student.StudentCreateDto;
-import com.behnam.university.dto.student.StudentDetailDto;
-import com.behnam.university.dto.student.StudentListDto;
-import com.behnam.university.dto.student.StudentAddCourseDto;
-import com.behnam.university.dto.student.StudentCourseScoreDto;
-import com.behnam.university.dto.student.StudentUpdateDto;
+import com.behnam.university.dto.student.*;
 import com.behnam.university.response.ResponseHandler;
 import com.behnam.university.response.ResponseModel;
-import com.behnam.university.service.student.StudentService;
+import com.behnam.university.service.interfaces.StudentService;
 import com.behnam.university.validation.annotations.ValidName;
 import com.behnam.university.validation.annotations.ValidSevenDigits;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,11 +11,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.SortDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
@@ -54,12 +49,11 @@ public class StudentController {
     // get the all of students
 
     /**
-     * @param page     optional param for getting the page By default is first page
-     * @param size     optional param for getting the size By default is 10
      * @param pageable return page of content in database
      * @return return the content of page witch is student lists
      */
     @GetMapping
+    @PreAuthorize("hasAuthority('student:read')")
     public ResponseEntity<ResponseModel> getAllStudents(
             @SortDefault(value = "lastName", direction = ASC)
             @PageableDefault(value = 10, page = 0) Pageable pageable
@@ -78,6 +72,7 @@ public class StudentController {
      * @return details of the student
      */
     @GetMapping(path = "{studentUniId}")
+    @PreAuthorize("hasAuthority('student:read')")
     public ResponseEntity<ResponseModel> getStudent(
             @PathVariable("studentUniId") Long studentUniId
     ) {
@@ -97,6 +92,7 @@ public class StudentController {
      * @return courses of the student
      */
     @GetMapping(path = "{uniID}/courses")
+    @PreAuthorize("hasAuthority('student:read')")
     public ResponseEntity<ResponseModel> getStudentCourses(
             @PathVariable("uniID") @ValidSevenDigits Long uniID
     ) {
@@ -111,6 +107,7 @@ public class StudentController {
 
     // get student average
     @GetMapping(path = "{uniID}/averages")
+    @PreAuthorize("hasAuthority('student:read')")
     public ResponseEntity<ResponseModel> getStudentAverage(@PathVariable("uniID") @ValidSevenDigits Long uniID) {
         try {
             Double result = service.getStudentAverage(uniID);
@@ -126,10 +123,10 @@ public class StudentController {
 
     /**
      * @param student     get the info of the student that wants to register in university
-     * @param collegeId Highlighting the college that the student want to educate.
      * @return student creation body
      */
     @PostMapping
+    @PreAuthorize("hasAuthority('student:write')")
     public ResponseEntity<ResponseModel> addStudent(
             @Valid @RequestBody StudentCreateDto student,
             @RequestParam @NotNull @ValidName String collegeName
@@ -148,6 +145,7 @@ public class StudentController {
      * @return uni id of fired student
      */
     @DeleteMapping(path = "{uniId}")
+    @PreAuthorize("hasAuthority('student:write')")
     public ResponseEntity<ResponseModel> deleteStudentByUniId(
             @PathVariable("uniId") @ValidSevenDigits Long uniId
     ) {
@@ -167,6 +165,7 @@ public class StudentController {
      * @return the body of changing data
      */
     @PutMapping("{uniId}")
+    @PreAuthorize("hasAuthority('student:write')")
     public ResponseEntity<ResponseModel> updateStudent(@PathVariable("uniId") Long uniId,
                                                        @Valid @RequestBody StudentUpdateDto dto) {
         try {
@@ -185,6 +184,7 @@ public class StudentController {
      */
 
     @PutMapping("{uniId}/courses")
+    @PreAuthorize("hasAuthority('student:write')")
     public ResponseEntity<ResponseModel> addCourseToEnrolledCourse(
             @PathVariable Long uniId,
             @Valid @RequestBody StudentAddCourseDto dto
@@ -205,6 +205,7 @@ public class StudentController {
      * @return nothing to return but status
      */
     @PutMapping(path = "{uniId}/courses/scores")
+    @PreAuthorize("hasAuthority('student:write')")
     public ResponseEntity<ResponseModel> addScoreCourse(
             @PathVariable("uniId") @ValidSevenDigits Long uniId,
             @Valid @RequestBody StudentCourseScoreDto dto
@@ -229,6 +230,7 @@ public class StudentController {
      * @return nothing but status
      */
     @PutMapping(path = "{uniId}/courses/delete/{courseName}")
+    @PreAuthorize("hasAuthority('student:write')")
     public ResponseEntity<ResponseModel> deleteStudentCourse(
             @PathVariable("uniId") @ValidSevenDigits Long uniId,
             @PathVariable @ValidName String courseName

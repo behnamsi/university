@@ -1,9 +1,9 @@
 package com.behnam.university.service.implemention;
 
-import com.behnam.university.dto.create.ProfessorCreateDto;
-import com.behnam.university.dto.detail.ProfessorDetailDto;
-import com.behnam.university.dto.list.ProfessorListDto;
-import com.behnam.university.dto.update.ProfessorUpdateDto;
+import com.behnam.university.dto.professor.ProfessorCreateDto;
+import com.behnam.university.dto.professor.ProfessorDetailDto;
+import com.behnam.university.dto.professor.ProfessorListDto;
+import com.behnam.university.dto.professor.ProfessorUpdateDto;
 import com.behnam.university.mapper.ProfessorMapper;
 import com.behnam.university.model.College;
 import com.behnam.university.model.Course;

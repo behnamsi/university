@@ -3,7 +3,6 @@ package com.behnam.university.controller.user;
 import com.behnam.university.dto.appUser.AppUserListDto;
 import com.behnam.university.response.ResponseHandler;
 import com.behnam.university.response.ResponseModel;
-import com.behnam.university.security.auth.AppUserService;
 import com.behnam.university.service.interfaces.AppUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;

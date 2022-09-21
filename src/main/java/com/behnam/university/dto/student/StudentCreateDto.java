@@ -1,33 +1,36 @@
-package com.behnam.university.dto.update;
+package com.behnam.university.dto.student;
+
 
 import com.behnam.university.validation.annotations.ValidName;
 import com.behnam.university.validation.annotations.ValidNationalId;
+import com.behnam.university.validation.annotations.ValidSevenDigits;
 
-import java.util.List;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
-/**
- * @author Behnam Si (https://github.com/behnamsi/)
- * @version 1.0
- * @since 9/12/2022
- */
-
-public class StudentUpdateDto {
+public class StudentCreateDto {
+    @NotNull
     @ValidName
     private String firstName;
+    @NotNull
     @ValidName
     private String lastName;
+    @NotNull
     @ValidNationalId
-    private Long nationalId;
-    private List<String> courses;
+    private long nationalId;
+    @NotNull
+    @ValidSevenDigits
+    private long universityId;
 
-    public StudentUpdateDto() {
+    public StudentCreateDto() {
     }
 
-    public StudentUpdateDto(String firstName, String lastName, Long nationalId, List<String> courses) {
+    public StudentCreateDto(String firstName, String lastName, long nationalId, long universityId) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.nationalId = nationalId;
-        this.courses = courses;
+        this.universityId = universityId;
     }
 
     public String getFirstName() {
@@ -46,29 +49,29 @@ public class StudentUpdateDto {
         this.lastName = lastName;
     }
 
-    public Long getNationalId() {
+    public long getNationalId() {
         return nationalId;
     }
 
-    public void setNationalId(Long nationalId) {
+    public void setNationalId(long nationalId) {
         this.nationalId = nationalId;
     }
 
-    public List<String> getCourses() {
-        return courses;
+    public long getUniversityId() {
+        return universityId;
     }
 
-    public void setCourses(List<String> courses) {
-        this.courses = courses;
+    public void setUniversityId(long universityId) {
+        this.universityId = universityId;
     }
 
     @Override
     public String toString() {
-        return "StudentUpdateDto{" +
+        return "StudentDto{" +
                 "firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", nationalId=" + nationalId +
-                ", courses=" + courses +
+                ", universityId=" + universityId +
                 '}';
     }
 }

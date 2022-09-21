@@ -1,24 +1,21 @@
-package com.behnam.university.dto.create;
-
-
+package com.behnam.university.dto.college;
 
 import com.behnam.university.validation.annotations.ValidName;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+/**
+ * @author Behnam Si (https://github.com/behnamsi/)
+ * @version 1.0
+ * @since 9/12/2022
+ */
 
-
-public class CollegeCreateDto {
-    @NotNull
+public class CollegeUpdateDto {
     @ValidName
     private String collegeName;
 
-    public CollegeCreateDto() {
+    public CollegeUpdateDto() {
     }
 
-
-    public CollegeCreateDto(String collegeName) {
+    public CollegeUpdateDto(String collegeName) {
         this.collegeName = collegeName;
     }
 
@@ -32,9 +29,8 @@ public class CollegeCreateDto {
 
     @Override
     public String toString() {
-        return "CollegeDto{" +
-                "name='" + collegeName + '\'' +
+        return "CollegeUpdateDto{" +
+                "collegeName='" + collegeName + '\'' +
                 '}';
     }
 }
-

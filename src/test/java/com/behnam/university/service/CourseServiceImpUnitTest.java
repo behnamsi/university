@@ -1,7 +1,7 @@
 package com.behnam.university.service;
 
 
-import com.behnam.university.dto.create.CourseCreateDto;
+import com.behnam.university.dto.course.CourseCreateDto;
 import com.behnam.university.model.College;
 import com.behnam.university.model.Course;
 import com.behnam.university.model.Professor;

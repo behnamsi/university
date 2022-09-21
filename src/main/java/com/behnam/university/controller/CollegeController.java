@@ -7,7 +7,7 @@ import com.behnam.university.dto.college.CollegeListDto;
 import com.behnam.university.dto.college.CollegeUpdateDto;
 import com.behnam.university.response.ResponseHandler;
 import com.behnam.university.response.ResponseModel;
-import com.behnam.university.service.college.CollegeService;
+import com.behnam.university.service.interfaces.CollegeService;
 import com.behnam.university.validation.annotations.ValidName;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -15,14 +15,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.SortDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import java.util.List;
-
 
 import static org.springframework.data.domain.Sort.Direction.ASC;
 import static org.springframework.http.HttpStatus.*;
@@ -43,6 +41,7 @@ public class CollegeController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAuthority('college:read')")
     public ResponseEntity<ResponseModel> getAllColleges(
             @SortDefault(value = "collegeName", direction = ASC)
             @PageableDefault(value = 10, page = 0) Pageable pageable
@@ -57,6 +56,7 @@ public class CollegeController {
     }
 
     @GetMapping(path = "{collegeName}")
+    @PreAuthorize("hasAuthority('college:read')")
     public ResponseEntity<ResponseModel> getCollege(@PathVariable("collegeName") @ValidName String collegeName) {
         try {
             CollegeDetailDto result = service.getCollege(collegeName);
@@ -68,6 +68,7 @@ public class CollegeController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('college:write')")
     public ResponseEntity<ResponseModel> addCollege(@Valid @RequestBody CollegeCreateDto collegeCreateDto) {
         try {
             CollegeCreateDto result = service.addCollege(collegeCreateDto);
@@ -80,6 +81,7 @@ public class CollegeController {
 
 
     @DeleteMapping(path = "{collegeName}")
+    @PreAuthorize("hasAuthority('college:write')")
     public ResponseEntity<ResponseModel> deleteCollegeByName(
             @PathVariable("collegeName") @ValidName String collegeName) {
         try {
@@ -92,6 +94,7 @@ public class CollegeController {
     }
 
     @PutMapping("{collegeId}")
+    @PreAuthorize("hasAuthority('college:write')")
     public ResponseEntity<ResponseModel> updateCollege(
             @PathVariable("collegeId") Long collegeId,
             @Valid @RequestBody CollegeUpdateDto dto

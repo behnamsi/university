@@ -1,7 +1,7 @@
 package com.behnam.university.service;
 
 
-import com.behnam.university.dto.create.StudentCreateDto;
+import com.behnam.university.dto.student.StudentCreateDto;
 import com.behnam.university.mapper.StudentMapper;
 import com.behnam.university.model.College;
 import com.behnam.university.model.Course;
@@ -10,7 +10,6 @@ import com.behnam.university.repository.CollegeRepository;
 import com.behnam.university.repository.CourseRepository;
 import com.behnam.university.repository.StudentRepository;
 import com.behnam.university.service.implemention.StudentServiceImp;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

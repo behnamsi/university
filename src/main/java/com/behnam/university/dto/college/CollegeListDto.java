@@ -1,4 +1,4 @@
-package com.behnam.university.dto.list;
+package com.behnam.university.dto.college;
 
 /**
  * @author Behnam Si (https://github.com/behnamsi/)

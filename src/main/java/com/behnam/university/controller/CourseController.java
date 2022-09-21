@@ -7,7 +7,7 @@ import com.behnam.university.dto.course.CourseListDto;
 import com.behnam.university.dto.course.CourseUpdateDto;
 import com.behnam.university.response.ResponseHandler;
 import com.behnam.university.response.ResponseModel;
-import com.behnam.university.service.course.CourseService;
+import com.behnam.university.service.interfaces.CourseService;
 import com.behnam.university.validation.annotations.ValidName;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -15,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.SortDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,6 +43,7 @@ public class CourseController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAuthority('course:read')")
     public ResponseEntity<ResponseModel> getAllCourses(
             @RequestParam(required = false) @Min(0) Integer page,
             @RequestParam(required = false) @Min(1) @Max(50) Integer size,
@@ -58,6 +60,7 @@ public class CourseController {
     }
 
     @GetMapping(path = "{courseId}")
+    @PreAuthorize("hasAuthority('course:read')")
     public ResponseEntity<ResponseModel> getCourse(
             @PathVariable("courseId") @Min(1) Long courseId
     ) {
@@ -71,6 +74,7 @@ public class CourseController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('course:write')")
     public ResponseEntity<ResponseModel> addCourse(@Valid @RequestBody CourseCreateDto courseCreateDto,
                                             @RequestParam("profId") @Min(1) Long professorPersonalId,
                                             @RequestParam("collegeName") @NotNull @ValidName String collegeName
@@ -85,6 +89,7 @@ public class CourseController {
     }
 
     @DeleteMapping("{courseName}")
+    @PreAuthorize("hasAuthority('course:write')")
     public ResponseEntity<ResponseModel> deleteCourseByName(
             @PathVariable("courseName") @ValidName String courseName
     ) {
@@ -98,6 +103,7 @@ public class CourseController {
     }
 
     @PutMapping("{courseId}")
+    @PreAuthorize("hasAuthority('course:write')")
     public ResponseEntity<ResponseModel> updateCourse(@PathVariable("courseId") Long courseId,
                                                       @Valid @RequestBody CourseUpdateDto dto) {
         try {

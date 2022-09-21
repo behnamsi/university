@@ -2,7 +2,7 @@ package com.behnam.university.service;
 
 
 
-import com.behnam.university.dto.create.CollegeCreateDto;
+import com.behnam.university.dto.college.CollegeCreateDto;
 import com.behnam.university.model.College;
 import com.behnam.university.repository.CollegeRepository;
 import com.behnam.university.service.implemention.CollegeServiceImp;

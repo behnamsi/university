@@ -6,7 +6,7 @@ import com.behnam.university.dto.professor.ProfessorListDto;
 import com.behnam.university.dto.professor.ProfessorUpdateDto;
 import com.behnam.university.response.ResponseHandler;
 import com.behnam.university.response.ResponseModel;
-import com.behnam.university.service.professor.ProfessorService;
+import com.behnam.university.service.interfaces.ProfessorService;
 import com.behnam.university.validation.annotations.ValidName;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.SortDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -47,6 +48,7 @@ public class ProfessorController {
 
     //get All Professors
     @GetMapping
+    @PreAuthorize("hasAuthority('professor:read')")
     public ResponseEntity<ResponseModel> getAllProfessors(
             @RequestParam(required = false) @Min(0) Integer page,
             @RequestParam(required = false) @Min(1) @Max(50) Integer size,
@@ -63,6 +65,7 @@ public class ProfessorController {
     }
 
     @GetMapping(path = "{profId}")
+    @PreAuthorize("hasAuthority('professor:read')")
     public ResponseEntity<ResponseModel> getProfessor(
             @PathVariable("profId") @Min(1) Long profId
     ) {
@@ -77,6 +80,7 @@ public class ProfessorController {
 
     // get all students that belong to a professor
     @GetMapping(path = "{professorId}/students")
+    @PreAuthorize("hasAuthority('professor:read')")
     public ResponseEntity<ResponseModel> getProfessorStudents(
             @PathVariable("professorId") @Min(1) Long professorId
     ) {
@@ -91,6 +95,7 @@ public class ProfessorController {
 
     // get all students averages that belong to a professor
     @GetMapping(path = "{professorId}/students/averages")
+    @PreAuthorize("hasAuthority('professor:read')")
     public ResponseEntity<ResponseModel> getProfessorStudentsAverages(
             @PathVariable("professorId") @Min(1) Long professorId
     ) {
@@ -105,6 +110,7 @@ public class ProfessorController {
 
     // get courses of a professor
     @GetMapping(path = "{professorId}/courses")
+    @PreAuthorize("hasAuthority('professor:read')")
     public ResponseEntity<ResponseModel> getProfessorsCourses(
             @PathVariable("professorId") @Min(1) Long professorId
     ) {
@@ -119,6 +125,7 @@ public class ProfessorController {
 
     // get students of a course of professor
     @GetMapping(path = "{professorId}/courses/{courseName}/students")
+    @PreAuthorize("hasAuthority('professor:read')")
     public ResponseEntity<ResponseModel> getProfessorStudentsByCourse(
             @PathVariable("courseName") @ValidName String courseName,
             @PathVariable("professorId") @Min(1) Long professorId
@@ -133,6 +140,7 @@ public class ProfessorController {
     }
 
     @GetMapping(path = "{professorId}/courses/{courseName}/students/averages")
+    @PreAuthorize("hasAuthority('professor:read')")
     public ResponseEntity<ResponseModel> getProfessorStudentsAverageByCourse(
             @PathVariable("courseName") @ValidName String courseName,
             @PathVariable("professorId") @Min(1) Long professorId
@@ -150,6 +158,7 @@ public class ProfessorController {
     //POST methods:
 
     @PostMapping
+    @PreAuthorize("hasAuthority('professor:write')")
     public ResponseEntity<ResponseModel> addProfessor(
             @Valid @RequestBody ProfessorCreateDto professorCreateDto,
             @RequestParam() @Min(1) Long collegeId
@@ -164,6 +173,7 @@ public class ProfessorController {
     }
 
     @DeleteMapping(path = "{profId}")
+    @PreAuthorize("hasAuthority('professor:write')")
     public ResponseEntity<ResponseModel> deleteProfessor(
             @PathVariable("profId") @Min(1) Long id
     ) {
@@ -177,6 +187,7 @@ public class ProfessorController {
     }
 
     @PutMapping("{profId}")
+    @PreAuthorize("hasAuthority('professor:write')")
     public ResponseEntity<ResponseModel> updateProfessor(
             @PathVariable("profId") Long profId,
             @Valid @RequestBody ProfessorUpdateDto dto

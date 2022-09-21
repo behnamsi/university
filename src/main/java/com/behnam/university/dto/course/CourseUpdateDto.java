@@ -1,4 +1,4 @@
-package com.behnam.university.dto.update;
+package com.behnam.university.dto.course;
 
 import com.behnam.university.validation.annotations.ValidName;
 import com.behnam.university.validation.annotations.ValidSevenDigits;

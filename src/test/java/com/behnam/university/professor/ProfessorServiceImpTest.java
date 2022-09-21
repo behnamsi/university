@@ -2,7 +2,7 @@ package com.behnam.university.professor;
 
 
 
-import com.behnam.university.dto.create.ProfessorCreateDto;
+import com.behnam.university.dto.professor.ProfessorCreateDto;
 import com.behnam.university.service.implemention.ProfessorServiceImp;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

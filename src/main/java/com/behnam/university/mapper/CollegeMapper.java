@@ -1,12 +1,7 @@
 package com.behnam.university.mapper;
 
-import com.behnam.university.dto.create.CollegeCreateDto;
+import com.behnam.university.dto.college.CollegeCreateDto;
 import com.behnam.university.model.College;
-import com.behnam.university.model.Course;
-
-import java.util.List;
-
-import static java.util.stream.Collectors.toList;
 
 public class CollegeMapper {
     public CollegeCreateDto toCollegeDto(College college) {

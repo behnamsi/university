@@ -1,9 +1,9 @@
 package com.behnam.university.service.interfaces;
 
-import com.behnam.university.dto.create.ProfessorCreateDto;
-import com.behnam.university.dto.detail.ProfessorDetailDto;
-import com.behnam.university.dto.list.ProfessorListDto;
-import com.behnam.university.dto.update.ProfessorUpdateDto;
+import com.behnam.university.dto.professor.ProfessorCreateDto;
+import com.behnam.university.dto.professor.ProfessorDetailDto;
+import com.behnam.university.dto.professor.ProfessorListDto;
+import com.behnam.university.dto.professor.ProfessorUpdateDto;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 

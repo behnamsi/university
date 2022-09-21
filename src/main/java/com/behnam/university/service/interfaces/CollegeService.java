@@ -1,10 +1,9 @@
 package com.behnam.university.service.interfaces;
 
-import com.behnam.university.dto.create.CollegeCreateDto;
-import com.behnam.university.dto.detail.CollegeDetailDto;
-import com.behnam.university.dto.list.CollegeListDto;
-import com.behnam.university.dto.update.CollegeUpdateDto;
-import com.behnam.university.model.College;
+import com.behnam.university.dto.college.CollegeCreateDto;
+import com.behnam.university.dto.college.CollegeDetailDto;
+import com.behnam.university.dto.college.CollegeListDto;
+import com.behnam.university.dto.college.CollegeUpdateDto;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 

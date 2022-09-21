@@ -1,7 +1,7 @@
 package com.behnam.university.mapper;
 
 
-import com.behnam.university.dto.create.StudentCreateDto;
+import com.behnam.university.dto.student.StudentCreateDto;
 import com.behnam.university.model.Student;
 
 public class StudentMapper {

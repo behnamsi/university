@@ -35,10 +35,10 @@ public class StaticMapper {
                     unknownTypeMapper(prototype, converting);
                 } else studentOrProfessorEntityToDetailDto(prototype, converting);
                 return;
-            case "com.behnam.university.dto.create.StudentCreateDto":
-            case "com.behnam.university.dto.create.ProfessorCreateDto":
-            case "com.behnam.university.dto.create.CourseCreateDto":
-            case "com.behnam.university.dto.create.CollegeCreateDto":
+            case "com.behnam.university.dto.student.StudentCreateDto":
+            case "com.behnam.university.dto.professor.ProfessorCreateDto":
+            case "com.behnam.university.dto.course.CourseCreateDto":
+            case "com.behnam.university.dto.college.CollegeCreateDto":
             case "com.behnam.university.model.College":
                 if (convertingClass.getSimpleName().equals("CollegeListDto"))
                     unknownTypeMapper(prototype, converting);
