@@ -5,6 +5,7 @@ import com.behnam.university.dto.appUser.AppUserListDto;
 import com.behnam.university.mapper.static_mapper.StaticMapper;
 import com.behnam.university.model.AppUser;
 import com.behnam.university.repository.AppUserRepository;
+import com.behnam.university.service.interfaces.AppUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Pageable;
@@ -29,13 +30,13 @@ import static com.behnam.university.security.roles.AppUserRoles.MANAGER;
 
 @Service
 @Primary
-public class AppUserService implements UserDetailsService {
+public class AppUserServiceImpl implements UserDetailsService, AppUserService {
 
     private final AppUserRepository repository;
     private final PasswordEncoder encoder;
 
     @Autowired
-    public AppUserService(AppUserRepository repository, PasswordEncoder encoder) {
+    public AppUserServiceImpl(AppUserRepository repository, PasswordEncoder encoder) {
         this.repository = repository;
         this.encoder = encoder;
     }
@@ -48,6 +49,7 @@ public class AppUserService implements UserDetailsService {
         return user;
     }
 
+    @Override
     public List<AppUserListDto> getAllUsers(Pageable pageable) {
         List<AppUser> users = repository.findAll(pageable).getContent();
         List<AppUserListDto> listDto = new ArrayList<>();
@@ -65,6 +67,7 @@ public class AppUserService implements UserDetailsService {
         return listDto;
     }
 
+    @Override
     public void addUser(AppUserCreateDto dto) {
         String username = dto.getUsername();
         String password = dto.getPassword();
@@ -84,6 +87,7 @@ public class AppUserService implements UserDetailsService {
         repository.save(user);
     }
 
+    @Override
     @Transactional
     public void deleteUser(String username) {
         repository.deleteAppUserByUsername(username);
