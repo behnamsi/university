@@ -1,7 +1,7 @@
 package com.behnam.university.service.interfaces;
 
-import com.behnam.university.dto.appUser.AppUserCreateDto;
-import com.behnam.university.dto.appUser.AppUserListDto;
+import com.behnam.university.dto.user.AppUserCreateDto;
+import com.behnam.university.dto.user.AppUserListDto;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;

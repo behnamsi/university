@@ -1,5 +1,6 @@
 package com.behnam.university.controller;
 
+import com.behnam.university.dto.common.CommonListDto;
 import com.behnam.university.dto.student.*;
 import com.behnam.university.response.ResponseHandler;
 import com.behnam.university.response.ResponseModel;
@@ -59,7 +60,7 @@ public class StudentController {
             @PageableDefault(value = 10, page = 0) Pageable pageable
     ) {
         try {
-            List<StudentListDto> result = (List<StudentListDto>) service.getAllStudents(pageable);
+            List<CommonListDto> result = service.getAll(pageable);
             String message = "get the data successfully";
             return responseHandler.globalResponse(message, OK, result);
         } catch (Exception e) {
@@ -77,7 +78,7 @@ public class StudentController {
             @PathVariable("studentUniId") Long studentUniId
     ) {
         try {
-            StudentDetailDto result = (StudentDetailDto) service.getStudent(studentUniId);
+            StudentDetailDto result = (StudentDetailDto) service.getStudentByUniId(studentUniId);
             String message = "get the data successfully";
             return responseHandler.globalResponse(message, OK, result);
         } catch (Exception e) {
@@ -122,7 +123,7 @@ public class StudentController {
     //POST methods
 
     /**
-     * @param student     get the info of the student that wants to register in university
+     * @param student get the info of the student that wants to register in university
      * @return student creation body
      */
     @PostMapping
@@ -132,9 +133,9 @@ public class StudentController {
             @RequestParam @NotNull @ValidName String collegeName
     ) {
         try {
-            StudentCreateDto result = (StudentCreateDto) service.addStudent(student, collegeName);
+//            StudentCreateDto result = (StudentCreateDto) service.addStudent(student, collegeName);
             String message = "create the data successfully";
-            return responseHandler.globalResponse(message, CREATED, result);
+            return responseHandler.globalResponse(message, CREATED, null);
         } catch (Exception e) {
             return responseHandler.globalResponse(e.getMessage(), BAD_REQUEST, null);
         }
@@ -169,9 +170,9 @@ public class StudentController {
     public ResponseEntity<ResponseModel> updateStudent(@PathVariable("uniId") Long uniId,
                                                        @Valid @RequestBody StudentUpdateDto dto) {
         try {
-            StudentUpdateDto result = (StudentUpdateDto) service.updateStudent(uniId, dto);
+//            StudentUpdateDto result = (StudentUpdateDto) service.updateStudent(uniId, dto);
             String message = "updated the data successfully";
-            return responseHandler.globalResponse(message, OK, result);
+            return responseHandler.globalResponse(message, OK, null);
         } catch (Exception e) {
             return responseHandler.globalResponse(e.getMessage(), BAD_REQUEST, null);
         }

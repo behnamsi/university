@@ -1,13 +1,13 @@
 package com.behnam.university.service.interfaces;
 
-import com.behnam.university.dto.student.StudentCreateDto;
+import com.behnam.university.dto.common.CommonCreateDto;
+import com.behnam.university.dto.common.CommonDetailDto;
+import com.behnam.university.dto.common.CommonListDto;
+import com.behnam.university.dto.common.CommonUpdateDto;
 import com.behnam.university.dto.student.StudentDetailDto;
-import com.behnam.university.dto.student.StudentListDto;
 import com.behnam.university.dto.student.StudentAddCourseDto;
 import com.behnam.university.dto.student.StudentCourseScoreDto;
-import com.behnam.university.dto.student.StudentUpdateDto;
-import com.behnam.university.model.Student;
-import org.springframework.data.domain.Pageable;
+import com.behnam.university.service.common.CommonCrudService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,25 +20,10 @@ import java.util.List;
 
 @Service
 
-public interface StudentService {
-    List<StudentCreateDto> getAllStudents(Integer limit, Integer page);
+public interface StudentService extends CommonCrudService<CommonListDto, CommonDetailDto, CommonUpdateDto, CommonCreateDto, Object> {
 
-    List<StudentListDto> getAllStudents(Pageable pageable);
-
-
-    StudentDetailDto getStudent(Long studentUniId);
-
-    StudentCreateDto addStudent(StudentCreateDto studentCreateDto, String collegeName);
-
-    Long deleteStudentByUniId(Long uniId);
-
-    Student updateStudent(
-            Long uniId,
-            String first_name,
-            String last_name,
-            List<String> courses,
-            Long nationalId);
-    StudentUpdateDto updateStudent(Long uniId, StudentUpdateDto dto);
+    StudentDetailDto getStudentByUniId(Long studentUniId);
+    public Long deleteStudentByUniId(Long uniId);
     List<String> getStudentCourses(Long uniId);
 
     void addScoreCourse(

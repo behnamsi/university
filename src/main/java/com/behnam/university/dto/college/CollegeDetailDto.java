@@ -1,5 +1,8 @@
 package com.behnam.university.dto.college;
 
+import com.behnam.university.dto.common.CommonDetailDto;
+import com.behnam.university.dto.common.CommonDto;
+
 import java.util.List;
 
 /**
@@ -8,7 +11,7 @@ import java.util.List;
  * @since 9/10/2022
  */
 
-public class CollegeDetailDto {
+public class CollegeDetailDto extends CommonDetailDto {
     private String collegeName;
     private List<String> professors;
     private List<String> students;

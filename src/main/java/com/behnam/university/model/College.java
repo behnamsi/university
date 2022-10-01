@@ -1,5 +1,6 @@
 package com.behnam.university.model;
 
+import com.behnam.university.model.common.CommonModel;
 import com.behnam.university.validation.annotations.ValidName;
 
 import javax.persistence.*;
@@ -10,7 +11,7 @@ import java.util.List;
 
 @Entity
 @Table
-public class College {
+public class College extends CommonModel {
 
     @Id
 

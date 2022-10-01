@@ -1,12 +1,15 @@
 package com.behnam.university.dto.student;
 
+import com.behnam.university.dto.common.CommonDto;
+import com.behnam.university.dto.common.CommonListDto;
+
 /**
  * @author Behnam Si (https://github.com/behnamsi/)
  * @version 1.0
  * @since 9/12/2022
  */
 
-public class StudentListDto {
+public class StudentListDto extends CommonListDto {
     private String firstName;
     private String lastName;
 

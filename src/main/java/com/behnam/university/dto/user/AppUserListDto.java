@@ -1,4 +1,6 @@
-package com.behnam.university.dto.appUser;
+package com.behnam.university.dto.user;
+
+import com.behnam.university.dto.common.CommonDto;
 
 /**
  * @author Behnam Si (https://github.com/behnamsi/)
@@ -6,7 +8,7 @@ package com.behnam.university.dto.appUser;
  * @since 9/18/2022
  */
 
-public class AppUserListDto {
+public class AppUserListDto extends CommonDto {
     private String username;
 
     public AppUserListDto() {

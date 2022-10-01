@@ -1,5 +1,7 @@
 package com.behnam.university.dto.professor;
 
+import com.behnam.university.dto.common.CommonDto;
+import com.behnam.university.dto.common.CommonUpdateDto;
 import com.behnam.university.validation.annotations.ValidName;
 import com.behnam.university.validation.annotations.ValidNationalId;
 
@@ -9,7 +11,7 @@ import com.behnam.university.validation.annotations.ValidNationalId;
  * @since 9/12/2022
  */
 
-public class ProfessorUpdateDto {
+public class ProfessorUpdateDto extends CommonUpdateDto {
     @ValidName
     private String firstName;
     @ValidName

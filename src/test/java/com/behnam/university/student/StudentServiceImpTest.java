@@ -20,8 +20,8 @@ class StudentServiceImpTest {
 
     @Test
     void getAllStudents() {
-        List<StudentCreateDto> studentCreateDTOS = service.getAllStudents(15, 1);
-        System.out.println("studentDTOS = " + studentCreateDTOS);
+//        List<StudentCreateDto> studentCreateDTOS = service.getAllStudents(15, 1);
+//        System.out.println("studentDTOS = " + studentCreateDTOS);
     }
 
     @Test
@@ -43,7 +43,7 @@ class StudentServiceImpTest {
         studentCreateDTO.setLastName("bu azar23");
         studentCreateDTO.setUniversityId(2213438L);
         studentCreateDTO.setNationalId(217111899L);
-        service.addStudent(studentCreateDTO, "computer");
+//        service.addStudent(studentCreateDTO, "computer");
     }
 
 
@@ -60,7 +60,7 @@ class StudentServiceImpTest {
         courses.add("algorithem");
         courses.add("java");
         Long nationalId = null;
-        service.updateStudent(22L, firstName, lastName, courses, nationalId);
+//        service.updateStudent(22L, firstName, lastName, courses, nationalId);
     }
 
     @Test
@@ -75,4 +75,12 @@ class StudentServiceImpTest {
     }
 
 
+    @Test
+    void getStudent() {
+        System.out.println("service.getStudent(9024006L) = " + service.getStudentByUniId(9024006L));
+    }
+
+    @Test
+    void addCourseToEnrolledCourse() {
+    }
 }

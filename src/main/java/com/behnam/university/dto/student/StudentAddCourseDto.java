@@ -1,5 +1,7 @@
 package com.behnam.university.dto.student;
 
+import com.behnam.university.dto.common.CommonDto;
+
 import javax.validation.constraints.NotNull;
 
 /**
@@ -8,7 +10,7 @@ import javax.validation.constraints.NotNull;
  * @since 9/16/2022
  */
 
-public class StudentAddCourseDto {
+public class StudentAddCourseDto extends CommonDto {
     @NotNull
     private String courseName;
 

@@ -1,11 +1,13 @@
 package com.behnam.university.dto.course;
 
 
+import com.behnam.university.dto.common.CommonCreateDto;
+import com.behnam.university.dto.common.CommonDto;
 import com.behnam.university.validation.annotations.ValidName;
 
 import javax.validation.constraints.*;
 
-public class CourseCreateDto {
+public class CourseCreateDto extends CommonCreateDto {
     @NotNull
     @ValidName
     private String courseName;

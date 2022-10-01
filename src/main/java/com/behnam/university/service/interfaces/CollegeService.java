@@ -4,6 +4,7 @@ import com.behnam.university.dto.college.CollegeCreateDto;
 import com.behnam.university.dto.college.CollegeDetailDto;
 import com.behnam.university.dto.college.CollegeListDto;
 import com.behnam.university.dto.college.CollegeUpdateDto;
+import com.behnam.university.service.common.CommonCrudService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +17,7 @@ import java.util.List;
  */
 
 @Service
-public interface CollegeService {
+public interface CollegeService extends CommonCrudService {
     List<CollegeCreateDto> getAllColleges(Integer page, Integer limit);
 
     List<CollegeListDto> getAllColleges(Pageable pageable);

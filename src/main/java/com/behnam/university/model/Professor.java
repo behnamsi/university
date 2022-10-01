@@ -1,5 +1,6 @@
 package com.behnam.university.model;
 
+import com.behnam.university.model.common.CommonModel;
 import com.behnam.university.validation.annotations.ValidName;
 import com.behnam.university.validation.annotations.ValidNationalId;
 import com.behnam.university.validation.annotations.ValidSevenDigits;
@@ -14,7 +15,7 @@ import java.util.List;
 
 @Entity
 @Table
-public class Professor {
+public class Professor extends CommonModel {
 
     @Id
 

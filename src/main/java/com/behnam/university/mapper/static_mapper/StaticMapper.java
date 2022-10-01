@@ -39,6 +39,8 @@ public class StaticMapper {
             case "com.behnam.university.dto.professor.ProfessorCreateDto":
             case "com.behnam.university.dto.course.CourseCreateDto":
             case "com.behnam.university.dto.college.CollegeCreateDto":
+                unknownTypeMapper(prototype, converting);
+                return;
             case "com.behnam.university.model.College":
                 if (convertingClass.getSimpleName().equals("CollegeListDto"))
                     unknownTypeMapper(prototype, converting);

@@ -28,7 +28,7 @@ import static org.springframework.http.HttpStatus.*;
 @RestController
 @RequestMapping(path = "api/colleges")
 @Validated
-public class CollegeController {
+public class CollegeController extends CommonController{
     private final CollegeService service;
     private final ResponseHandler responseHandler;
 
@@ -36,6 +36,7 @@ public class CollegeController {
     @Autowired
     public CollegeController(
             @Qualifier("collegeServiceImp") CollegeService service, ResponseHandler responseHandler) {
+        super(service, responseHandler);
         this.service = service;
         this.responseHandler = responseHandler;
     }

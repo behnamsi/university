@@ -1,6 +1,10 @@
 package com.behnam.university.service.implemention;
 
 
+import com.behnam.university.dto.common.CommonCreateDto;
+import com.behnam.university.dto.common.CommonDetailDto;
+import com.behnam.university.dto.common.CommonListDto;
+import com.behnam.university.dto.common.CommonUpdateDto;
 import com.behnam.university.dto.student.StudentCreateDto;
 import com.behnam.university.dto.student.StudentDetailDto;
 import com.behnam.university.dto.student.StudentListDto;
@@ -17,6 +21,7 @@ import com.behnam.university.repository.CollegeRepository;
 import com.behnam.university.repository.CourseRepository;
 import com.behnam.university.repository.ProfessorRepository;
 import com.behnam.university.repository.StudentRepository;
+import com.behnam.university.service.common.CommonCrudServiceImpl;
 import com.behnam.university.service.interfaces.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
@@ -38,7 +43,9 @@ import java.util.*;
 @Service("studentServiceImp")
 @Primary
 @Validated
-public class StudentServiceImp implements StudentService {
+public class StudentServiceImp
+        extends CommonCrudServiceImpl<StudentRepository, Student>
+        implements StudentService {
 
     protected final StudentRepository repository;
     protected final CollegeRepository collegeRepository;
@@ -55,6 +62,7 @@ public class StudentServiceImp implements StudentService {
             ProfessorRepository professorRepository,
             Converter<Student, StudentCreateDto> studentToStudentDtoConverter,
             Converter<StudentCreateDto, Student> studentDtoToStudentConverter) {
+        super(repository);
         this.repository = repository;
         this.collegeRepository = collegeRepository;
         this.courseRepository = courseRepository;
@@ -63,53 +71,54 @@ public class StudentServiceImp implements StudentService {
         this.studentDtoToStudentConverter = studentDtoToStudentConverter;
     }
 
-    @Override
-    public List<StudentCreateDto> getAllStudents(Integer limit, Integer page) {
-        // limit and page filter
-        if (limit == null) limit = 3;
-        if (page == null) page = 0;
-        else page -= 1;
-        if (limit > 100) throw new IllegalStateException("limit should not be more than 100");
-        // paging nad sorting data
-        Pageable studentPageable =
-                PageRequest.of(page, limit, Sort.by("lastName").descending());
-        Page<Student> studentPage = repository.findAll(studentPageable);
-        // mapping data to dto
-        List<StudentCreateDto> result = new ArrayList<>();
-        for (Student s :
-                studentPage.getContent()) {
-            StudentCreateDto dto = new StudentCreateDto();
-            studentToStudentDtoConverter.convert(s, dto);
-            result.add(dto);
-        }
-        return result;
-//        StudentMapper mapper = new StudentMapper();
-//        return studentPage
-//                .getContent()
-//                .stream()
-//                .map(mapper::studentToDto)
-//                .collect(toList());
-    }
+//    @Override
+//    public List<StudentCreateDto> getAllStudents(Integer limit, Integer page) {
+//        // limit and page filter
+//        if (limit == null) limit = 3;
+//        if (page == null) page = 0;
+//        else page -= 1;
+//        if (limit > 100) throw new IllegalStateException("limit should not be more than 100");
+//        // paging nad sorting data
+//        Pageable studentPageable =
+//                PageRequest.of(page, limit, Sort.by("lastName").descending());
+//        Page<Student> studentPage = repository.findAll(studentPageable);
+//        // mapping data to dto
+//        List<StudentCreateDto> result = new ArrayList<>();
+//        for (Student s :
+//                studentPage.getContent()) {
+//            StudentCreateDto dto = new StudentCreateDto();
+//            studentToStudentDtoConverter.convert(s, dto);
+//            result.add(dto);
+//        }
+//        return result;
+////        StudentMapper mapper = new StudentMapper();
+////        return studentPage
+////                .getContent()
+////                .stream()
+////                .map(mapper::studentToDto)
+////                .collect(toList());
+//    }
+
+//    @Override
+//    public List<StudentListDto> getAllStudents(Pageable pageable) {
+//        List<Student> students = repository.findAll(pageable).getContent();
+//        List<StudentListDto> studentDetailDTOS = new ArrayList<>();
+//        for (Student s :
+//                students) {
+//            StudentListDto dto = new StudentListDto();
+//            try {
+//                StaticMapper.mapper(s, dto);
+//                studentDetailDTOS.add(dto);
+//            } catch (InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//        return studentDetailDTOS;
+//    }
 
     @Override
-    public List<StudentListDto> getAllStudents(Pageable pageable) {
-        List<Student> students = repository.findAll(pageable).getContent();
-        List<StudentListDto> studentDetailDTOS = new ArrayList<>();
-        for (Student s :
-                students) {
-            StudentListDto dto = new StudentListDto();
-            try {
-                StaticMapper.mapper(s, dto);
-                studentDetailDTOS.add(dto);
-            } catch (InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
-                e.printStackTrace();
-            }
-        }
-        return studentDetailDTOS;
-    }
-
-    @Override
-    public StudentDetailDto getStudent(Long studentUniId) {
+    @Transactional
+    public StudentDetailDto getStudentByUniId(Long studentUniId) {
         if (!repository.existsStudentByUniversityId(studentUniId)) {
             throw new IllegalStateException("invalid uni id");
         }
@@ -123,34 +132,34 @@ public class StudentServiceImp implements StudentService {
         return studentDetailDto;
     }
 
-    @Override
-    public StudentCreateDto addStudent(StudentCreateDto studentCreateDto, String collegeName) {
-        if (collegeName != null) {
-            if (!collegeRepository.existsCollegeByCollegeName(collegeName)) {
-                throw new IllegalStateException("invalid college name");
-            }
-            College college = collegeRepository
-                    .findCollegeByCollegeName(collegeName);
-
-            if (repository.existsStudentByUniversityId(studentCreateDto.getUniversityId())) {
-                throw new IllegalStateException("university id is taken");
-            }
-            if (repository.existsStudentByNationalId(studentCreateDto.getNationalId())
-                    || professorRepository.existsProfessorByNationalId(studentCreateDto.getNationalId())) {
-                throw new IllegalStateException("national id is taken");
-            }
-            // mapping to entity
-            Student student = new Student();
-//            StudentMapper mapper = new StudentMapper();
-//            student = mapper.dtoTOStudent(studentDto);
-            studentDtoToStudentConverter.convert(studentCreateDto, student);
-            student.setStudentCollege(college);
-            repository.save(student);
-            return studentCreateDto;
-        } else {
-            throw new IllegalStateException("college id can not be null");
-        }
-    }
+//    @Override
+//    public StudentCreateDto addStudent(StudentCreateDto studentCreateDto, String collegeName) {
+//        if (collegeName != null) {
+//            if (!collegeRepository.existsCollegeByCollegeName(collegeName)) {
+//                throw new IllegalStateException("invalid college name");
+//            }
+//            College college = collegeRepository
+//                    .findCollegeByCollegeName(collegeName);
+//
+//            if (repository.existsStudentByUniversityId(studentCreateDto.getUniversityId())) {
+//                throw new IllegalStateException("university id is taken");
+//            }
+//            if (repository.existsStudentByNationalId(studentCreateDto.getNationalId())
+//                    || professorRepository.existsProfessorByNationalId(studentCreateDto.getNationalId())) {
+//                throw new IllegalStateException("national id is taken");
+//            }
+//            // mapping to entity
+//            Student student = new Student();
+////            StudentMapper mapper = new StudentMapper();
+////            student = mapper.dtoTOStudent(studentDto);
+//            studentDtoToStudentConverter.convert(studentCreateDto, student);
+//            student.setStudentCollege(college);
+//            repository.save(student);
+//            return studentCreateDto;
+//        } else {
+//            throw new IllegalStateException("college id can not be null");
+//        }
+//    }
 
     //    @Transactional
 //    public void deleteStudent(Long id) {
@@ -169,10 +178,10 @@ public class StudentServiceImp implements StudentService {
         return uniId;
     }
 
-    @Override
-    @Transactional
-    public Student updateStudent(Long uniId, String first_name, String last_name, List<String> courses,
-                                 Long nationalId) {
+//    @Override
+//    @Transactional
+//    public Student updateStudent(Long uniId, String first_name, String last_name, List<String> courses,
+//                                 Long nationalId) {
 //        if (!repository.existsStudentByUniversityId(uniId)) {
 //            throw new IllegalStateException("invalid university id");
 //        }
@@ -213,57 +222,57 @@ public class StudentServiceImp implements StudentService {
 //            student.setNationalId(nationalId);
 //        }
 //        return student;
-        return null;
-    }
+//        return null;
+//    }
 
-    @Override
-    @Transactional
-    public StudentUpdateDto updateStudent(Long uniId, StudentUpdateDto dto) {
-        if (!repository.existsStudentByUniversityId(uniId)) {
-            throw new IllegalStateException("student does not exists.");
-        }
-        if (repository.existsStudentByNationalId(dto.getNationalId()) ||
-                professorRepository.existsProfessorByNationalId(dto.getNationalId())) {
-            throw new IllegalStateException("national id has taken");
-        }
-        Student student = repository.findStudentByUniversityId(uniId);
-        if (dto.getFirstName() != null) {
-            student.setFirstName(dto.getFirstName());
-        }
-        if (dto.getLastName() != null) {
-            student.setLastName(dto.getLastName());
-        }
-
-
-        // adding course/courses to the student with its professor
-        if (dto.getCourses() != null) {
-            if (!dto.getCourses().isEmpty()) {
-                for (String courseName :
-                        dto.getCourses()) {
-                    if (!courseRepository.existsCourseByCourseName(courseName)) {
-                        throw new IllegalStateException("the course with name" + courseName + "is not available");
-                    }
-                    Course course = courseRepository.findCourseByCourseName(courseName);
-                    Professor professor = course.getProfessor();
-                    if (!student.getProfessorsOfStudent().contains(professor)) {
-                        student.getProfessorsOfStudent().add(professor);
-
-                    }
-                    if (!student.getStudentCourses().contains(course)) {
-                        student.getStudentCourses().add(course);
-                    } else throw new IllegalStateException("this student already has this course");
-                }
-//            student.setStudentCourses(courses);
-            }
-        }
-        // end of course
-
-
-        if (dto.getNationalId() != null) {
-            student.setNationalId(dto.getNationalId());
-        }
-        return dto;
-    }
+//    @Override
+//    @Transactional
+//    public StudentUpdateDto updateStudent(Long uniId, StudentUpdateDto dto) {
+//        if (!repository.existsStudentByUniversityId(uniId)) {
+//            throw new IllegalStateException("student does not exists.");
+//        }
+//        if (repository.existsStudentByNationalId(dto.getNationalId()) ||
+//                professorRepository.existsProfessorByNationalId(dto.getNationalId())) {
+//            throw new IllegalStateException("national id has taken");
+//        }
+//        Student student = repository.findStudentByUniversityId(uniId);
+//        if (dto.getFirstName() != null) {
+//            student.setFirstName(dto.getFirstName());
+//        }
+//        if (dto.getLastName() != null) {
+//            student.setLastName(dto.getLastName());
+//        }
+//
+//
+//        // adding course/courses to the student with its professor
+//        if (dto.getCourses() != null) {
+//            if (!dto.getCourses().isEmpty()) {
+//                for (String courseName :
+//                        dto.getCourses()) {
+//                    if (!courseRepository.existsCourseByCourseName(courseName)) {
+//                        throw new IllegalStateException("the course with name" + courseName + "is not available");
+//                    }
+//                    Course course = courseRepository.findCourseByCourseName(courseName);
+//                    Professor professor = course.getProfessor();
+//                    if (!student.getProfessorsOfStudent().contains(professor)) {
+//                        student.getProfessorsOfStudent().add(professor);
+//
+//                    }
+//                    if (!student.getStudentCourses().contains(course)) {
+//                        student.getStudentCourses().add(course);
+//                    } else throw new IllegalStateException("this student already has this course");
+//                }
+////            student.setStudentCourses(courses);
+//            }
+//        }
+//        // end of course
+//
+//
+//        if (dto.getNationalId() != null) {
+//            student.setNationalId(dto.getNationalId());
+//        }
+//        return dto;
+//    }
 
 
     @Override

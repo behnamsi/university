@@ -1,6 +1,9 @@
 package com.behnam.university.dto.college;
 
+import com.behnam.university.dto.common.CommonDto;
+import com.behnam.university.dto.common.CommonUpdateDto;
 import com.behnam.university.validation.annotations.ValidName;
+
 
 /**
  * @author Behnam Si (https://github.com/behnamsi/)
@@ -8,7 +11,7 @@ import com.behnam.university.validation.annotations.ValidName;
  * @since 9/12/2022
  */
 
-public class CollegeUpdateDto {
+public class CollegeUpdateDto extends CommonUpdateDto {
     @ValidName
     private String collegeName;
 

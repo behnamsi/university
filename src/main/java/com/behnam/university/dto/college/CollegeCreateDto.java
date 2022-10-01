@@ -2,6 +2,8 @@ package com.behnam.university.dto.college;
 
 
 
+import com.behnam.university.dto.common.CommonCreateDto;
+import com.behnam.university.dto.common.CommonDto;
 import com.behnam.university.validation.annotations.ValidName;
 
 import javax.validation.constraints.NotEmpty;
@@ -9,7 +11,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 
-public class CollegeCreateDto {
+public class CollegeCreateDto extends CommonCreateDto {
     @NotNull
     @ValidName
     private String collegeName;

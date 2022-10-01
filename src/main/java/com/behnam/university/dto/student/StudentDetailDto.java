@@ -1,12 +1,15 @@
 package com.behnam.university.dto.student;
 
+import com.behnam.university.dto.common.CommonDetailDto;
+import com.behnam.university.dto.common.CommonDto;
+
 /**
  * @author Behnam Si (https://github.com/behnamsi/)
  * @version 1.0
  * @since 9/10/2022
  */
 
-public class StudentDetailDto {
+public class StudentDetailDto extends CommonDetailDto {
 
     private String firstName;
     private String lastName;
@@ -67,7 +70,7 @@ public class StudentDetailDto {
 
     @Override
     public String toString() {
-        return "StudentListDto{" +
+        return "StudentDetailDto{" +
                 "firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", collegeName='" + collegeName + '\'' +

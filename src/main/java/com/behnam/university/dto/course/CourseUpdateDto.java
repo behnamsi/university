@@ -1,5 +1,7 @@
 package com.behnam.university.dto.course;
 
+import com.behnam.university.dto.common.CommonDto;
+import com.behnam.university.dto.common.CommonUpdateDto;
 import com.behnam.university.validation.annotations.ValidName;
 import com.behnam.university.validation.annotations.ValidSevenDigits;
 
@@ -13,7 +15,7 @@ import javax.validation.constraints.Size;
  * @since 9/12/2022
  */
 
-public class CourseUpdateDto {
+public class CourseUpdateDto extends CommonUpdateDto {
     @ValidName
     private String courseName;
     @Min(1) @Max(3)

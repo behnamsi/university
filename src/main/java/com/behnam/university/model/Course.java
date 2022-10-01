@@ -1,5 +1,6 @@
 package com.behnam.university.model;
 
+import com.behnam.university.model.common.CommonModel;
 import com.behnam.university.validation.annotations.ValidName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -9,7 +10,7 @@ import java.util.List;
 
 @Entity
 @Table
-public class Course {
+public class Course extends CommonModel {
     @Id
 
     @GeneratedValue(

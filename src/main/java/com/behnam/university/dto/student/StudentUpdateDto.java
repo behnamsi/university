@@ -1,5 +1,7 @@
 package com.behnam.university.dto.student;
 
+import com.behnam.university.dto.common.CommonDto;
+import com.behnam.university.dto.common.CommonUpdateDto;
 import com.behnam.university.validation.annotations.ValidName;
 import com.behnam.university.validation.annotations.ValidNationalId;
 
@@ -11,7 +13,7 @@ import java.util.List;
  * @since 9/12/2022
  */
 
-public class StudentUpdateDto {
+public class StudentUpdateDto extends CommonUpdateDto {
     @ValidName
     private String firstName;
     @ValidName

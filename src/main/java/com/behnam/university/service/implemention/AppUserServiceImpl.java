@@ -1,7 +1,7 @@
 package com.behnam.university.service.implemention;
 
-import com.behnam.university.dto.appUser.AppUserCreateDto;
-import com.behnam.university.dto.appUser.AppUserListDto;
+import com.behnam.university.dto.user.AppUserCreateDto;
+import com.behnam.university.dto.user.AppUserListDto;
 import com.behnam.university.mapper.static_mapper.StaticMapper;
 import com.behnam.university.model.AppUser;
 import com.behnam.university.repository.AppUserRepository;
@@ -9,6 +9,7 @@ import com.behnam.university.service.interfaces.AppUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -19,8 +20,9 @@ import javax.transaction.Transactional;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
-import static com.behnam.university.security.roles.AppUserRoles.MANAGER;
+import static com.behnam.university.security.roles.AppUserRoles.*;
 
 /**
  * @author Behnam Si (https://github.com/behnamsi/)
@@ -71,6 +73,24 @@ public class AppUserServiceImpl implements UserDetailsService, AppUserService {
     public void addUser(AppUserCreateDto dto) {
         String username = dto.getUsername();
         String password = dto.getPassword();
+        Set<SimpleGrantedAuthority> authorities = null;
+        switch (dto.getRole()) {
+            case 0:
+                authorities = ADMIN.getAuthorities();
+                break;
+            case 1:
+                authorities = MANAGER.getAuthorities();
+                break;
+            case 2:
+                authorities = PROFESSOR.getAuthorities();
+                break;
+            case 3:
+                authorities = STUDENT.getAuthorities();
+                break;
+            default:
+                authorities = MANAGER.getAuthorities();
+
+        }
         if (repository.existsAppUserByUsername(username)) {
             throw new IllegalStateException("username has already taken");
         }
@@ -78,7 +98,7 @@ public class AppUserServiceImpl implements UserDetailsService, AppUserService {
             throw new IllegalStateException("password and confirm password dose not match");
         if (dto.getPassword().length() < 8)
             throw new IllegalStateException("password not strong");
-        AppUser user = new AppUser(MANAGER.getAuthorities(),
+        AppUser user = new AppUser(authorities,
                 username,
                 password,
                 true, true, true, true);

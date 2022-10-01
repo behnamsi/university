@@ -1,12 +1,15 @@
 package com.behnam.university.dto.course;
 
+import com.behnam.university.dto.common.CommonDetailDto;
+import com.behnam.university.dto.common.CommonDto;
+
 /**
  * @author Behnam Si (https://github.com/behnamsi/)
  * @version 1.0
  * @since 9/10/2022
  */
 
-public class CourseDetailDto {
+public class CourseDetailDto extends CommonDetailDto {
 
     private String courseName;
     private Integer unitNumber;
@@ -25,7 +28,7 @@ public class CourseDetailDto {
 
     @Override
     public String toString() {
-        return "CourseListDto{" +
+        return "CourseDetailDto{" +
                 "name='" + courseName + '\'' +
                 ", unitNumber=" + unitNumber +
                 ", professorOfCourse='" + professorOfCourse + '\'' +

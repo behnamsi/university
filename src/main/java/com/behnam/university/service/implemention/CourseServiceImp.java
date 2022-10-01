@@ -102,9 +102,14 @@ public class CourseServiceImp implements CourseService {
                     collegeRepository
                             .findCollegeByCollegeName(collegeName);
             // mapping to entity
-            CourseMapper mapper = new CourseMapper();
-            Course course;
-            course = mapper.dtoToCourse(courseCreateDto);
+//            CourseMapper mapper = new CourseMapper();
+            Course course=new Course();
+//            course = mapper.dtoToCourse(courseCreateDto);
+            try {
+                StaticMapper.mapper(courseCreateDto,course);
+            } catch (InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
+                e.printStackTrace();
+            }
             course.setProfessor(professor);
             course.setCourseCollege(college);
             repository.save(course);
@@ -182,6 +187,7 @@ public class CourseServiceImp implements CourseService {
 
 
     @Override
+    @Transactional
     public CourseDetailDto getCourse(Long courseId) {
         Course course = repository.findById(courseId).orElseThrow(
                 () -> new IllegalStateException("invalid course id")

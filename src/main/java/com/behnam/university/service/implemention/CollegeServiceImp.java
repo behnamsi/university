@@ -8,6 +8,7 @@ import com.behnam.university.mapper.CollegeMapper;
 import com.behnam.university.mapper.static_mapper.StaticMapper;
 import com.behnam.university.model.College;
 import com.behnam.university.repository.CollegeRepository;
+import com.behnam.university.service.common.CommonCrudServiceImpl;
 import com.behnam.university.service.interfaces.CollegeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
@@ -29,7 +30,7 @@ import java.util.Objects;
 
 @Service("collegeServiceImp")
 @Primary
-public class CollegeServiceImp implements CollegeService {
+public class CollegeServiceImp  implements CollegeService {
 
     private final CollegeRepository repository;
 
@@ -95,8 +96,13 @@ public class CollegeServiceImp implements CollegeService {
     @Override
     public CollegeCreateDto addCollege(CollegeCreateDto collegeCreateDto) {
         // turn into college
-        CollegeMapper mapper = new CollegeMapper();
-        College college = mapper.toCollege(collegeCreateDto);
+//        CollegeMapper mapper = new CollegeMapper();
+        College college = new College();
+        try {
+            StaticMapper.mapper(collegeCreateDto,college);
+        } catch (InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
         // saving to database
         repository.save(college);
         return collegeCreateDto;
@@ -134,4 +140,28 @@ public class CollegeServiceImp implements CollegeService {
         return dto;
     }
 
+    @Override
+    public List getAll(Pageable pageable) {
+        return null;
+    }
+
+    @Override
+    public Object get(Object o) {
+        return null;
+    }
+
+    @Override
+    public Object add(Object o, Object... objects) {
+        return null;
+    }
+
+    @Override
+    public Object update(Object o, Object o2) {
+        return null;
+    }
+
+    @Override
+    public Object delete(Object o) {
+        return null;
+    }
 }
