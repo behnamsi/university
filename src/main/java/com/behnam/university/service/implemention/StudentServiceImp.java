@@ -64,6 +64,7 @@ public class StudentServiceImp implements StudentService {
     }
 
     @Override
+    @Deprecated
     public List<StudentCreateDto> getAllStudents(Integer limit, Integer page) {
         // limit and page filter
         if (limit == null) limit = 3;
@@ -109,6 +110,7 @@ public class StudentServiceImp implements StudentService {
     }
 
     @Override
+    @Transactional
     public StudentDetailDto getStudent(Long studentUniId) {
         if (!repository.existsStudentByUniversityId(studentUniId)) {
             throw new IllegalStateException("invalid uni id");

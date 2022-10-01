@@ -39,6 +39,7 @@ public class CollegeServiceImp implements CollegeService {
     }
 
     @Override
+    @Deprecated
     public List<CollegeCreateDto> getAllColleges(Integer page, Integer limit) {
         CollegeMapper mapper = new CollegeMapper();
         // page and limit filters
@@ -79,6 +80,7 @@ public class CollegeServiceImp implements CollegeService {
     }
 
     @Override
+    @Transactional
     public CollegeDetailDto getCollege(String collegeName) {
         if (!repository.existsCollegeByCollegeName(collegeName))
             throw new IllegalStateException("invalid college name");

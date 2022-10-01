@@ -48,6 +48,7 @@ public class ProfessorServiceImp implements ProfessorService {
     }
 
     @Override
+    @Deprecated
     public List<ProfessorCreateDto> getAllProfessors(Integer page, Integer limit) {
         // limit and paging filter
         if (limit == null) limit = 3;
@@ -295,6 +296,7 @@ public class ProfessorServiceImp implements ProfessorService {
     }
 
     @Override
+    @Transactional
     public ProfessorDetailDto getProfessor(Long profId) {
         Professor professor = repository.findById(profId).orElseThrow(
                 () -> new IllegalStateException("invalid professor id")

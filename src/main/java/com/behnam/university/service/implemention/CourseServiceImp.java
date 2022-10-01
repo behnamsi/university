@@ -51,6 +51,7 @@ public class CourseServiceImp implements CourseService {
     }
 
     @Override
+    @Deprecated
     public List<CourseCreateDto> getAllCourses(Integer page, Integer limit) {
         CourseMapper mapper = new CourseMapper();
         // limit and paging filters
@@ -182,6 +183,7 @@ public class CourseServiceImp implements CourseService {
 
 
     @Override
+    @Transactional
     public CourseDetailDto getCourse(Long courseId) {
         Course course = repository.findById(courseId).orElseThrow(
                 () -> new IllegalStateException("invalid course id")
